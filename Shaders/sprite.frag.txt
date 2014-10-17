@@ -1,0 +1,13 @@
+#version 130 
+
+uniform sampler2D sampler;
+
+in vec2 pass_Tex;
+
+out vec4 out_Color;
+
+void main(void)
+{
+out_Color=texture(sampler,pass_Tex);
+//out_Color=vec4(1,1,1,1);
+}
