@@ -4,8 +4,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "GameOptions.h"
 
-static bool mouseWarp = false;
-
 int gameInput(bool &quit){
     SDL_Event event;
 

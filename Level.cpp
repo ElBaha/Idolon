@@ -4,6 +4,7 @@
 #include "ShaderHelp.h"
 #include "Textures.h"
 #include "Input.h"
+#include "BoneSprite.h"
 
 Level* theLevel = NULL;
 
@@ -46,6 +47,7 @@ void Level::run(SDL_Window* window) {
 
     setup();
     bool quit=false;
+    BoneSprite b;
 
     while(!quit) {
         gameInput(quit);
@@ -53,7 +55,7 @@ void Level::run(SDL_Window* window) {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glm::mat4 viewMatrix = glm::translate(glm::mat4(),glm::vec3(camX,camY,0));
-
+        b.render(viewMatrix);
 
         glm::mat4 temp;
         glUseProgram(getShader("sprite"));
@@ -69,6 +71,7 @@ void Level::run(SDL_Window* window) {
         glBindTexture(GL_TEXTURE_2D,getTexture("back"));
         glDrawArrays(GL_QUADS,0,4);
         glBindVertexArray(0);
+
 
 //printf("%s\n",gluErrorString(glGetError()));
 
