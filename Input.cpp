@@ -1,7 +1,6 @@
 #include "Input.h"
 #include "Level.h"
 #include <SDL2/SDL.h>
-#include <glm/gtc/matrix_transform.hpp>
 #include "GameOptions.h"
 
 int gameInput(bool &quit){

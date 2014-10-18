@@ -1,4 +1,5 @@
 #include "Level.h"
+#define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
 #include "ShaderHelp.h"
