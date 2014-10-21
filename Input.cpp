@@ -32,10 +32,10 @@ int gameInput(bool &quit){
                         mainCam.vel.z=-1;
                         }*/
                     if (event.key.keysym.sym == SDLK_a){
-						theLevel->player->translate(-1., 0);
+						theLevel->player->translate(-1., 0, theLevel);
                         }
                     if (event.key.keysym.sym == SDLK_d){
-						theLevel->player->translate(1., 0);
+						theLevel->player->translate(1., 0, theLevel);
                         }
 
 

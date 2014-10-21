@@ -11,7 +11,7 @@ Level* theLevel = NULL;
 
 Level::Level()
 {
-    camX=camY=10;
+    camX=camY=0;
 	player = NULL;
 
 }
@@ -54,11 +54,11 @@ void Level::run(SDL_Window* window) {
     while(!quit) {
         gameInput(quit);
 
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glm::mat4 viewMatrix = glm::translate(glm::mat4(),glm::vec3(camX,camY,0));
 
 		for (int i = 0; i < entities.size(); i++) {
+			entities[i]->update(this);
 			entities[i]->render(viewMatrix);
 		}
 

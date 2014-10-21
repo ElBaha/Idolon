@@ -6,8 +6,9 @@
 #include "Textures.h"
 #include "ShaderHelp.h"
 #include "GLHelp.h"
-
 #include "Level.h"
+#include "BoneSprite.h"
+#include "StatSprite.h"
 
 #define VERSION "Idolon v0.0"
 
@@ -21,7 +22,13 @@ int main ( int argc, char** argv ) {
     // make sure SDL cleans up before exit
     atexit(SDL_Quit);
 
-    SDL_Window* screen = SDL_CreateWindow(VERSION ,SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,gameOptions.getInt("XRES",800), gameOptions.getInt("YRES",600), (gameOptions.getBool("FULLSCREEN")?SDL_WINDOW_FULLSCREEN_DESKTOP:0)|SDL_WINDOW_OPENGL);
+    SDL_Window* screen = SDL_CreateWindow(
+		VERSION,
+		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+		gameOptions.getInt("XRES",800), gameOptions.getInt("YRES",600),
+		(gameOptions.getBool("FULLSCREEN") ? SDL_WINDOW_FULLSCREEN_DESKTOP:0) | SDL_WINDOW_OPENGL
+	);
+
     SDL_GLContext glcontext=SDL_GL_CreateContext(screen);
     SDL_ShowCursor(true);
     GLenum err = glewInit();
@@ -59,6 +66,7 @@ int main ( int argc, char** argv ) {
     theLevel = &l;
 	l.player = new Entity();
 	l.entities.push_back(l.player);
+	l.entities.push_back(new Entity("Pointcube", 10, 30, 70, 20));
     l.run(screen);
 
 
