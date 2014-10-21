@@ -12,6 +12,7 @@ Level* theLevel = NULL;
 Level::Level()
 {
     camX=camY=10;
+	player = NULL;
 }
 
 Level::~Level()
@@ -48,7 +49,6 @@ void Level::run(SDL_Window* window) {
 
     setup();
     bool quit=false;
-    BoneSprite b;
 
     while(!quit) {
         gameInput(quit);
@@ -56,7 +56,10 @@ void Level::run(SDL_Window* window) {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glm::mat4 viewMatrix = glm::translate(glm::mat4(),glm::vec3(camX,camY,0));
-        b.render(viewMatrix);
+
+		for (int i = 0; i < entities.size(); i++) {
+			entities[i]->render(viewMatrix);
+		}
 
         glm::mat4 temp;
         glUseProgram(getShader("sprite"));

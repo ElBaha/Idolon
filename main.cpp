@@ -1,11 +1,6 @@
-#ifdef __cplusplus
+#include <ctime>
 #include <cstdlib>
-#else
-#include <stdlib.h>
-#endif
-
 #include <SDL2/SDL.h>
-#include <time.h>
 
 
 #include "Textures.h"
@@ -62,6 +57,8 @@ int main ( int argc, char** argv ) {
 
     Level l;
     theLevel = &l;
+	l.player = new Entity();
+	l.entities.push_back(l.player);
     l.run(screen);
 
 
@@ -75,6 +72,5 @@ int main ( int argc, char** argv ) {
 
     // all is well ;)
     printf("Exited cleanly\n");
-    //exit(0);
     return 0;
 }
