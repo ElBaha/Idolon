@@ -32,10 +32,11 @@ int gameInput(bool &quit){
                         mainCam.vel.z=-1;
                         }*/
                     if (event.key.keysym.sym == SDLK_a){
-						theLevel->player->translate(-1., 0);
+						theLevel->player->deltaX = -.03;
+
                         }
                     if (event.key.keysym.sym == SDLK_d){
-						theLevel->player->translate(1., 0);
+						theLevel->player->deltaX = .03;
                         }
 
 
@@ -48,6 +49,14 @@ int gameInput(bool &quit){
                     if (event.key.keysym.sym == SDLK_ESCAPE){
                         quit=true;
                         }
+                    if (event.key.keysym.sym == SDLK_a){
+						theLevel->player->deltaX = 0.;
+
+                        }
+                    if (event.key.keysym.sym == SDLK_d){
+						theLevel->player->deltaX = 0.;
+                        }
+
 
                     break;
                 }

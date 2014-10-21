@@ -1,6 +1,8 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
+class Level;
+
 #include <vector>
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
