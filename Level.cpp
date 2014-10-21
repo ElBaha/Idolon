@@ -58,11 +58,6 @@ void Level::run(SDL_Window* window) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glm::mat4 viewMatrix = glm::translate(glm::mat4(),glm::vec3(camX,camY,0));
 
-		for (int i = 0; i < entities.size(); i++) {
-			entities[i]->render(viewMatrix);
-		}
-
-
         glm::mat4 temp;
         glUseProgram(getShader("sprite"));
         GLuint tempLoc=glGetUniformLocation(getShader("sprite"), "viewMatrix");
@@ -78,6 +73,10 @@ void Level::run(SDL_Window* window) {
         glDrawArrays(GL_QUADS,0,4);
         glBindVertexArray(0);
 
+
+	for (int i = 0; i < entities.size(); i++) {
+			entities[i]->render(viewMatrix);
+		}
 
 //printf("%s\n",gluErrorString(glGetError()));
 

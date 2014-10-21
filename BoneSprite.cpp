@@ -1,11 +1,13 @@
 #include "BoneSprite.h"
 #include "ShaderHelp.h"
 #include "Textures.h"
+
 //todo force radians
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 
 #define for_each(x,y,z) for(x::iterator y = z.begin(); y != z.end(); y++)
+#define sign(x) (x>0?1:(x<0?-1:0))
 
 BoneSprite::BoneSprite(){
     base.tex="testa";
@@ -14,30 +16,32 @@ BoneSprite::BoneSprite(){
 
     base.joints.push_back(Joint(Bone("testb",2,10),1));
     base.joints.front().type=1;
-    base.joints.front().min=-.05;
+    //base.joints.front().min=-.5;
     base.joints.front().tx=1;
     base.joints.front().ty=1;
     base.joints.front().bx=5;
     base.joints.front().by=30;
 
     Joint* j=&base.joints.front();
-    j->bone.joints.push_back(Joint(Bone("testb",2,10),0));
-    j->bone.joints.front().max=0;
+    j->bone.joints.push_back(Joint(Bone("testc",4,10),0));
+    //j->bone.joints.front().max=0;
+    j->bone.joints.front().speed=.012121212;
     j->bone.joints.front().tx=1;
     j->bone.joints.front().ty=1;
     j->bone.joints.front().bx=1;
     j->bone.joints.front().by=9;
 
     base.joints.push_front(Joint(Bone("testb",2,10),-.5));
-    base.joints.front().min=-.05;
+    //base.joints.front().min=-.5;
     base.joints.front().tx=1;
     base.joints.front().ty=1;
     base.joints.front().bx=5;
     base.joints.front().by=30;
 
     j=&base.joints.front();
-    j->bone.joints.push_back(Joint(Bone("testb",2,10),0));
-    j->bone.joints.front().max=0;
+    j->bone.joints.push_back(Joint(Bone("testc",4,10),0));
+    //j->bone.joints.front().max=0;
+    j->bone.joints.front().speed=.012121212;
     j->bone.joints.front().tx=1;
     j->bone.joints.front().ty=1;
     j->bone.joints.front().bx=1;
@@ -49,13 +53,20 @@ BoneSprite::BoneSprite(){
 Joint::Joint(Bone b, float a){
     bone=b; angle=a;
     bx=by=tx=ty=0;
-    type=0;
-    min=-1,max=1;
+	pre=NULL;
+    type=2;
+    //min=-1,max=1;
     speed=.01;
+}
+
+Joint::~Joint(){
+	if(pre)
+		delete pre;
 }
 
 void Joint::update(){
 
+    /*if(type==0||type==1){
     if(type==0)
         angle+=speed;
     else if(type==1)
@@ -65,6 +76,15 @@ void Joint::update(){
         type=1;
     if(angle<min)
         type=0;
+    }*/
+
+    if(type==2){
+
+		float pred=0;
+		if(pre)
+			pred=pre->pred(0);
+        angle+=sign(pred-angle)*max(speed,pred-angle);
+    }
 
 }
 
@@ -104,7 +124,7 @@ void BoneSprite::render(glm::mat4 view,float x, float y){
     GLuint tempLoc=glGetUniformLocation(getShader("sprite"), "viewMatrix");
     glUniformMatrix4fv(tempLoc,1, GL_FALSE,&view[0][0]);
 
-    base.render(vao.vao,glm::translate(glm::mat4(),glm::vec3(x,y,0)));
+    base.render(vao.vao,glm::translate(glm::mat4(),glm::vec3(x,y+50,0)));
 
 
 }

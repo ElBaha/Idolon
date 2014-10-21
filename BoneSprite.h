@@ -3,6 +3,7 @@
 #include "Sprite.h"
 #include <GL/glew.h>
 #include "stdvao.h"
+#include "Predictor.h"
 #include <list>
 #include <string>
 
@@ -26,6 +27,7 @@ public:
 class Joint{
 public:
     Joint(Bone b, float a);
+	~Joint();
     void update();
 
     Bone bone;
@@ -35,7 +37,9 @@ public:
     float bx,by;
     //this affix point
     float tx,ty;
-    float min,max,speed;
+
+	Predictor* pre;
+    float speed;
     int type;
 
 };
