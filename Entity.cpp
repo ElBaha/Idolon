@@ -18,6 +18,5 @@ void Entity::translate(float dx, float dy) {
 }
 
 void Entity::render(glm::mat4 view) {
-	view = glm::translate(view, glm::vec3(posX, posY, 0));
-	sprite->render(view);
+	sprite->render(view,posX,posY);
 }

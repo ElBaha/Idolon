@@ -26,6 +26,7 @@ public:
 class Joint{
 public:
     Joint(Bone b, float a);
+    void update();
 
     Bone bone;
     float angle;
@@ -34,6 +35,8 @@ public:
     float bx,by;
     //this affix point
     float tx,ty;
+    float min,max,speed;
+    int type;
 
 };
 
@@ -41,7 +44,7 @@ class BoneSprite:public Sprite {
 public:
     BoneSprite();
     virtual ~BoneSprite();
-    virtual void render(glm::mat4 view);
+    virtual void render(glm::mat4 view,float x, float y);
 
     vao::UpperCornerSquare vao;
     Bone base;

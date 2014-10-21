@@ -5,7 +5,7 @@
 #include "ShaderHelp.h"
 #include "Textures.h"
 #include "Input.h"
-#include "BoneSprite.h"
+#include "StatSprite.h"
 
 Level* theLevel = NULL;
 
@@ -13,6 +13,7 @@ Level::Level()
 {
     camX=camY=10;
 	player = NULL;
+
 }
 
 Level::~Level()
@@ -60,6 +61,7 @@ void Level::run(SDL_Window* window) {
 		for (int i = 0; i < entities.size(); i++) {
 			entities[i]->render(viewMatrix);
 		}
+
 
         glm::mat4 temp;
         glUseProgram(getShader("sprite"));
