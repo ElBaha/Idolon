@@ -7,6 +7,7 @@
 Entity::Entity() {
 	// Temporary, initializes the player
 	sprite = new BoneSprite();
+	deltaX = deltaY = 0.;
 	posX = 40.;
 	posY = 120.;
 	bbWidth = 10.;
@@ -55,12 +56,16 @@ bool Entity::translate(float dx, float dy, const Level * l) {
 }
 
 void Entity::update(const Level * l) {
+	// update gravity
 	if (!fixed) {
 		gravity -= .0001;
 		if (!translate(0, gravity, l)) {
 			gravity = 0.;
 		}
 	}
+
+	// update arbitrary deltas
+	translate(deltaX, deltaY, l);
 }
 
 void Entity::render(glm::mat4 view) {

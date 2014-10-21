@@ -28,6 +28,7 @@ public:
 	void render(glm::mat4 view);
 
 	bool fixed;
+	float deltaX, deltaY;
 };
 
 #endif
