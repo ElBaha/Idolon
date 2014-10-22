@@ -18,7 +18,11 @@ Level::Level()
 
 Level::~Level()
 {
-    //dtor
+    //if(player)
+	//delete player;
+
+    for(int x=0;x<entities.size();x++)
+	delete entities[x];
 }
 
 void Level::setup(){
