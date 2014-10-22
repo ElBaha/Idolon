@@ -11,23 +11,23 @@ class Entity
 {
 	Sprite * sprite;
 	float posX, posY;
+	float bbRot;
 	float bbWidth, bbHeight;
 	float gravity;
 
 protected:
-	bool ecollides(const Entity *);
-	bool lcollides(const Level *);
+	void collides(const Entity *);
 
 public:
 	Entity();
-	Entity(string t, float x, float y, float w, float h);
+	Entity(string t, float x, float y, float w, float h, float r);
 	~Entity();
 
-	bool translate(float dx, float dy, const Level *);
 	void update(const Level *);
 	void render(glm::mat4 view);
 
 	bool fixed;
+	float accelX, accelY;
 	float deltaX, deltaY;
 };
 

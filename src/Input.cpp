@@ -3,6 +3,8 @@
 #include <SDL2/SDL.h>
 #include "GameOptions.h"
 
+#define ACCELERATION .0001
+
 int gameInput(bool &quit){
     SDL_Event event;
 
@@ -32,11 +34,11 @@ int gameInput(bool &quit){
                         mainCam.vel.z=-1;
                         }*/
                     if (event.key.keysym.sym == SDLK_a){
-						theLevel->player->deltaX = -.03;
+						theLevel->player->accelX = -ACCELERATION;
 
                         }
                     if (event.key.keysym.sym == SDLK_d){
-						theLevel->player->deltaX = .03;
+						theLevel->player->accelX = ACCELERATION;
                         }
 
 
@@ -50,11 +52,11 @@ int gameInput(bool &quit){
                         quit=true;
                         }
                     if (event.key.keysym.sym == SDLK_a){
-						theLevel->player->deltaX = 0.;
+						theLevel->player->accelX = 0.;
 
                         }
                     if (event.key.keysym.sym == SDLK_d){
-						theLevel->player->deltaX = 0.;
+						theLevel->player->accelX = 0.;
                         }
 
 

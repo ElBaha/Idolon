@@ -23,7 +23,7 @@ void StatSprite::render(glm::mat4 view,float x, float y){
     glUniformMatrix4fv(tempLoc,1, GL_FALSE,&view[0][0]);
 
     glm::mat4 temp = glm::translate(glm::mat4(),glm::vec3(x,y,1));
-    temp = glm::scale(temp,glm::vec3(sx,sy,0));
+    temp = glm::scale(temp,glm::vec3(sx,-sy,0));
     tempLoc=glGetUniformLocation(getShader("sprite"), "modelMatrix");
     glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
 

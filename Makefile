@@ -8,7 +8,7 @@ TARGET = idolon
 CC     = g++
 
 # Flags that are used regardless of compiliation options go here
-CCFL := -c -g -Wall
+CCFL := -c -g -Wall -Wno-sign-compare
 LDFL := -Wall -lGL -lGLU -lGLEW -lSDL2 -lpng
 
 # List of source files
