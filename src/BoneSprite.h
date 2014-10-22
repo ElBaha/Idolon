@@ -15,13 +15,14 @@ class Bone {
 public:
     Bone(){sx=sy=0;}
     Bone(string s,float x, float y){tex=s;sx=x;sy=y;}
+	~Bone();
 
     void render(GLuint vao,glm::mat4 model);
 
     string tex;
     //size x,y
     float sx,sy;
-    list<Joint> joints;
+    list<Joint*> joints;
 };
 
 class Joint{
