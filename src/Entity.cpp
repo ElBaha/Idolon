@@ -68,7 +68,7 @@ void Entity::collides(const Entity * e) {
 void Entity::update(const Level * l) {
 	// adjust for gravity
 	if (!fixed) {
-		gravity += .0001;
+		gravity += .001;
 	}
 
 	// update position

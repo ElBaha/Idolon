@@ -1,6 +1,8 @@
 #version 130 
 
 uniform sampler2D sampler;
+uniform vec3 fColor;
+uniform float fade;
 
 in vec2 pass_Tex;
 
@@ -8,6 +10,6 @@ out vec4 out_Color;
 
 void main(void)
 {
-out_Color=texture(sampler,pass_Tex);
+out_Color=mix(vec4(fColor,1),texture(sampler,pass_Tex),fade);
 //out_Color=vec4(1,1,1,1);
 }

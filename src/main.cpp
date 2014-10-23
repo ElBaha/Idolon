@@ -64,8 +64,8 @@ int main ( int argc, char** argv ) {
 
     Level l;
     theLevel = &l;
-	l.player = new Entity("outline", 50, 90, 20, 40, 0);
-	//l.player = new Entity();
+	//l.player = new Entity("outline", 50, 90, 20, 40, 0);
+	l.player = new Entity();
 	l.player->fixed = false;
 	l.entities.push_back(l.player);
 	l.entities.push_back(new Entity("outline", 10, 10, 80, 20, 0));

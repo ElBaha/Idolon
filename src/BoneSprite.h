@@ -53,6 +53,7 @@ public:
 
     vao::UpperCornerSquare vao;
     Bone base;
+    float offset;
 };
 
 #endif // BONESPRITE_H

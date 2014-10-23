@@ -9,43 +9,45 @@
 
 Level* theLevel = NULL;
 
-Level::Level()
-{
+Level::Level() {
     camX=camY=0;
-	player = NULL;
+    player = NULL;
 
 }
 
-Level::~Level()
-{
+Level::~Level() {
     //if(player)
-	//delete player;
+    //delete player;
 
-    for(int x=0;x<entities.size();x++)
-	delete entities[x];
+    for(int x=0; x<entities.size(); x++)
+        delete entities[x];
 }
 
-void Level::setup(){
+void Level::setup() {
     glClearColor(.5, .5, 1, 1);
 
-	glm::mat4 temp;
-	temp=glm::ortho(0.0,100.0,0.0,100.0,-50.0,50.0);
-	/*int tempLoc=glGetUniformLocation(getShader("debris"), "projectionMatrix");
-	glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
+    glm::mat4 temp;
+    temp=glm::ortho(0.0,100.0,0.0,100.0,-50.0,50.0);
+    /*int tempLoc=glGetUniformLocation(getShader("debris"), "projectionMatrix");
+    glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
 
-	glUseProgram(getShader("laser"));
-	tempLoc=glGetUniformLocation(getShader("laser"), "projectionMatrix");
-	glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
+    glUseProgram(getShader("laser"));
+    tempLoc=glGetUniformLocation(getShader("laser"), "projectionMatrix");
+    glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
 
-	glUseProgram(getShader("mod"));
-	tempLoc=glGetUniformLocation(getShader("mod"), "projectionMatrix");
-	glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);*/
+    glUseProgram(getShader("mod"));
+    tempLoc=glGetUniformLocation(getShader("mod"), "projectionMatrix");
+    glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);*/
 
-	glUseProgram(getShader("sprite"));
-	GLuint tempLoc=glGetUniformLocation(getShader("sprite"), "projectionMatrix");
-	glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
-	tempLoc=glGetUniformLocation(getShader("sprite"), "sampler");
+    glUseProgram(getShader("sprite"));
+    GLuint tempLoc=glGetUniformLocation(getShader("sprite"), "projectionMatrix");
+    glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
+    tempLoc=glGetUniformLocation(getShader("sprite"), "sampler");
     glUniform1i(tempLoc,0);
+    tempLoc=glGetUniformLocation(getShader("sprite"), "fColor");
+    glUniform3f(tempLoc,0,0,0);
+    tempLoc=glGetUniformLocation(getShader("sprite"), "fade");
+    glUniform1f(tempLoc,0.5);
 
 
 }
@@ -54,8 +56,10 @@ void Level::run(SDL_Window* window) {
 
     setup();
     bool quit=false;
+    float fade=0;
 
     while(!quit) {
+        SDL_Delay(20);
         gameInput(quit);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -65,6 +69,10 @@ void Level::run(SDL_Window* window) {
         glUseProgram(getShader("sprite"));
         GLuint tempLoc=glGetUniformLocation(getShader("sprite"), "viewMatrix");
         glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
+        tempLoc=glGetUniformLocation(getShader("sprite"), "fade");
+        glUniform1f(tempLoc,fade);
+        if(fade<1)
+            fade+=.002;
 
         temp = glm::translate(glm::mat4(),glm::vec3(50.0,50.0,0));
         temp = glm::scale(temp,glm::vec3(50.0,50.0,0));
@@ -77,10 +85,10 @@ void Level::run(SDL_Window* window) {
         glBindVertexArray(0);
 
 
-	for (int i = 0; i < entities.size(); i++) {
-			entities[i]->update(this);
-			entities[i]->render(viewMatrix);
-		}
+        for (int i = 0; i < entities.size(); i++) {
+            entities[i]->update(this);
+            entities[i]->render(viewMatrix);
+        }
 
 //printf("%s\n",gluErrorString(glGetError()));
 
