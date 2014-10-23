@@ -33,11 +33,11 @@ int gameInput(bool &quit){
                         mainCam.vel.z=-1;
                         }*/
                     if (event.key.keysym.sym == SDLK_a){
-						theLevel->player->accelX = -player_acceleration;
+						theLevel->player->accel.x = -player_acceleration;
 
                         }
                     if (event.key.keysym.sym == SDLK_d){
-						theLevel->player->accelX = player_acceleration;
+						theLevel->player->accel.x = player_acceleration;
                         }
 
 
@@ -51,11 +51,11 @@ int gameInput(bool &quit){
                         quit=true;
                         }
                     if (event.key.keysym.sym == SDLK_a){
-						theLevel->player->accelX = 0.;
+						theLevel->player->accel.x = 0.;
 
                         }
                     if (event.key.keysym.sym == SDLK_d){
-						theLevel->player->accelX = 0.;
+						theLevel->player->accel.x = 0.;
                         }
 
 

@@ -3,6 +3,8 @@
 
 class Entity;
 
+#define GLM_FORCE_RADIANS
+#include <glm/gtc/matrix_transform.hpp>
 #include "Level.h"
 #include "Sprite.h"
 #include "StatSprite.h"
@@ -10,24 +12,22 @@ class Entity;
 class Entity
 {
 	Sprite * sprite;
-	float posX, posY;
-	float bbRot;
-	float bbWidth, bbHeight;
+	float angle;
+	glm::vec2 pos, delta, box;
 
 protected:
 	void collides(const Entity *);
 
 public:
 	Entity();
-	Entity(string t, float x, float y, float w, float h, float r);
+	Entity(string t, float x, float y, float w, float h);
 	~Entity();
 
 	void update(const Level *);
 	void render(glm::mat4 view);
 
 	bool fixed;
-	float accelX, accelY;
-	float deltaX, deltaY;
+	glm::vec2 accel;
 };
 
 #endif

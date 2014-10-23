@@ -1,6 +1,4 @@
-#define GLM_FORCE_RADIANS
 #include <stdlib.h>
-#include <glm/gtc/matrix_transform.hpp>
 #include "Entity.h"
 #include "StatSprite.h"
 #include "BoneSprite.h"
@@ -9,25 +7,23 @@
 Entity::Entity() {
 	// Temporary, initializes the player
 	sprite = new BoneSprite();
-	deltaX = deltaY = 0.;
-	accelX = accelY = 0.;
-	posX = 40.;
-	posY = 120.;
-	bbRot = 0.;
-	bbWidth = 10.;
-	bbHeight = 100.;
+	delta.x = delta.y = 0.;
+	accel.x = accel.y = 0.;
+	pos.x = 40.;
+	pos.y = 120.;
+	box.x = 10.;
+	box.y = 100.;
 	fixed = false;
 }
 
-Entity::Entity(string t, float x, float y, float w, float h, float r) {
+Entity::Entity(string t, float x, float y, float w, float h) {
 	sprite = new StatSprite(t, w, h);
-	deltaX = deltaY = 0.;
-	accelX = accelY = 0.;
-	posX = x;
-	posY = y;
-	bbWidth = w;
-	bbHeight = h;
-	bbRot = r;
+	delta.x = delta.y = 0.;
+	accel.x = accel.y = 0.;
+	pos.x = x;
+	pos.x = y;
+	box.x = w;
+	box.y = h;
 	fixed = true;
 }
 
@@ -37,52 +33,52 @@ Entity::~Entity() {
 
 void Entity::collides(const Entity * e) {
 	if (e == this) return;
-	if (e->posX >= posX + bbWidth || posX >= e->posX + e->bbWidth) return;
-	if (e->posY >= posY + bbHeight || posY >= e->posY + e->bbHeight) return;
+	if (e->pos.x >= pos.x + box.x || pos.x >= e->pos.x + e->box.x) return;
+	if (e->pos.y >= pos.y + box.y || pos.y >= e->pos.y + e->box.y) return;
 
 	// have a collision, adjust for it
-	float dx1 = -(e->posX + e->bbWidth) + posX;
-	float dx2 = -e->posX + (e->posX + e->bbWidth);
-	float dy1 = -(e->posY + e->bbHeight) + posY;
-	float dy2 = -e->posY + (e->posY + e->bbHeight);
+	float dx1 = -(e->pos.x + e->box.x) + pos.x;
+	float dx2 = -e->pos.x + (e->pos.x + e->box.x);
+	float dy1 = -(e->pos.y + e->box.y) + pos.y;
+	float dy2 = -e->pos.y + (e->pos.y + e->box.y);
 
 	float dx = abs(dx1) < abs(dx2) ? dx1 : dx2;
 	float dy = abs(dy1) < abs(dy2) ? dy1 : dy2;
 
 	if (abs(dx) < abs(dy)) {
-		posX -= dx;
-		if (dx < 0 && deltaX < 0) deltaX = 0.;
-		if (dx > 0 && deltaX > 0) deltaX = 0.;
+		pos.x -= dx;
+		if (dx < 0 && delta.x < 0) delta.x = 0.;
+		if (dx > 0 && delta.x > 0) delta.x = 0.;
 	} else {
-		posY -= dy;
-		deltaY = 0.;
+		pos.y -= dy;
+		delta.y = 0.;
 	}
 
 	// friction
-	deltaX *= friction_x;
-	deltaY *= friction_y;
+	delta.x *= friction_x;
+	delta.y *= friction_y;
 }
 
 void Entity::update(const Level * l) {
 	// adjust for gravity
 	if (!fixed) {
-		deltaY -= gravity_acceleration;
+		delta.y -= gravity_acceleration;
 	}
 
 	// update position
-	deltaX += accelX;
-	deltaY += accelY;
+	delta.x += accel.x;
+	delta.y += accel.y;
 
-	if ( deltaX >  max_delta_x) deltaX =  max_delta_x;
-	if (-deltaX < -max_delta_x) deltaX = -max_delta_x;
-	if ( deltaY >  max_delta_y) deltaY =  max_delta_y;
-	if (-deltaY < -max_delta_y) deltaY = -max_delta_y;
+	if ( delta.x >  max_delta_x) delta.x =  max_delta_x;
+	if (-delta.x < -max_delta_x) delta.x = -max_delta_x;
+	if ( delta.y >  max_delta_y) delta.y =  max_delta_y;
+	if (-delta.y < -max_delta_y) delta.y = -max_delta_y;
 
-	posX += deltaX;
-	posY += deltaY;
+	pos.x += delta.x;
+	pos.y += delta.y;
 
 	// don't bother to check collision if we don't move
-	if (deltaX || deltaY) {
+	if (delta.x || delta.y) {
 		// adjust for collisions
 		for (int i = 0; i < l->entities.size(); i++) {
 			collides(l->entities[i]);
@@ -91,6 +87,6 @@ void Entity::update(const Level * l) {
 }
 
 void Entity::render(glm::mat4 view) {
-	sprite->render(view, posX, posY);
+	sprite->render(view, pos.x, pos.y);
 }
 

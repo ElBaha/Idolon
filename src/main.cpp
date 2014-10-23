@@ -1,4 +1,5 @@
 #include <ctime>
+#include <cmath>
 #include <cstdlib>
 #include <SDL2/SDL.h>
 
@@ -68,7 +69,7 @@ int main ( int argc, char** argv ) {
 	l.player = new Entity();
 	l.player->fixed = false;
 	l.entities.push_back(l.player);
-	l.entities.push_back(new Entity("outline", 10, 10, 80, 20, 0));
+	l.entities.push_back(new Entity("outline", 10, 0, 80, 20));
     l.run(screen);
 
 
