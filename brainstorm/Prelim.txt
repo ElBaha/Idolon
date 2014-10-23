@@ -1,0 +1,157 @@
+Alright, so. This is basically going to be a stream-of-consciousness document where I dump all of my ideas for Idolon as I think of them, and hopefully lead into a cohesive 
+section about story. Let's begin with...
+
+MECHANICS
+---------
+
+Our mechanics should be simple. I'm thinkin' WASD/Arrow Keys (or hjkl) for movement, and space for interact. We shouldn't need more than that.
+
+The game takes place in a 2D perspective, but that doesn't mean we need generic platformer mechanics. 
+
+	-This should feel relatively slow-paced and deliberate. If the player moves like Mario, we're doing it wrong.
+	
+	-Rather than being execution intensive, we want the game to feel mentally challenging.
+	
+On that note, I'm thinking the control layout should be as follows:
+
+	D/Right/L: Move right
+	A/Left/H: Move left
+	S/Down/J: Duck/Climb down
+	W/Up/K: Climb up
+	Space/E/Enter: Object interaction/Chat box progression/phone check
+
+You may be noticing the lack of a 'jump' key. This doesn't mean the game has to play out on a straight line. I think 'climb up' should be a universal option -- use it
+for climbing boxes and ledges, rather than jumping over them all skippy-like. If things are arcadey, it will really ruin the motif we're trying for.
+
+The player will also likely have an inventory, though the items within can be automatically used when applied to the proper situation.
+(e.g. w/ screwdriver in inventory, player attempts to open vent, screwdriver is used to pull out screws.)
+
+I mentioned above that space/E/enter may double as a key to check your phone -- I like the idea of being on a timer. I think that, when not standing in front of any interactable 
+objects, pressing the use key should allow the player to look at their phone to see how much time they have left, a map of the area, as well as their inventory. This would be 
+accompanied by the actual player sprite looking down at the phone in their hand. Of course, this could just be placed on-screen instead, without the phone being involved, but it 
+seems like a neat visual design point to me.
+
+I want to take a moment to point out that everything in this file should be taken with a grain of salt. I'm not the only person working on the project, obviously, and running
+with my input without talking about it as a group would be silly.
+
+
+VISUAL STYLE
+------------
+
+While it would be nice to try to go for a full hand-drawn sort of look, with fluid animations that rival the likes of a studio, none of us have a terrible amount of artistic
+talent. With that in mind, I'd like to try to follow a very simple policy on visual design:
+
+	-Emphasis on heavy, dramatic shadows
+
+	-Clean animations that can be easily re-used
+
+	-Strike some sort of balance between spritework/cel-shading
+
+I'm not terribly fond of the idea of going with a straight-up sprite-based approach. It's really heavily overdone in small game projects at this point, so if we could all
+fiddle about with various ideas until we find a middle ground between something that's easy to produce and something that looks relatively decent, that would be wise.
+
+The lighting is going to be a really big deal. Since, as mentioned before, we don't have artistic talent in spades, we're going to want to rely heavily on what can be generated for us.
+Most of the game should be designed around the idea of shadows/lighting, to the point where it may touch how level design plays out. 
+
+Also, I personally think that it would be nice to have a blue cast to the game that gradually fades to red as the story progresses. There's also the idea that we start the game unable to see the player's
+face, cast in shadow, but can see, very sharply, the face of everyone else. As the story continues, the inverse becomes true -- the 'protagonist's face becomes more clear, while the faces of others
+fade to shadow.
+
+As the stages progress, and the character becomes more insane, the game should fade from a standard look to more of the bloodpunk theme previously discussed. This will all change back to normal, briefly,
+in the final moments of the player-interactable portion of the game, before just going straight back to full-blown insanity.
+
+USER INTERFACE
+--------------
+
+We're going to want this to be fairly minimal. I think the entirety of the in-game UI should consist of four elements:
+
+	-A top dialog box. This box will /ONLY/ be used by the person who shall henceforth be referred to as 'the operator'. They're the one giving you commands.
+
+		-Activity in this box should NOT interrupt gameplay, and as such, the box shouldn't be terribly visually intrusive.
+
+	-A bottom dialog box. This box will be used by all other characters, including the Player Character(Who can only communicate with things such as '...?', '...!', and the like.)
+
+		-Activity in this box WILL interrupt gameplay, so it would be wise to make it take screen prominence.
+
+	-The phone screen, when pulled up
+
+	-Any indicators of direction of things we need.
+
+		-This one is very debatable, and I'm not sure we want it. Basically, this would consist of a small arrow pointing at persons of interest when off-screen.
+
+I'm thinking that much of the UI should go for a muted theme, save for the glowy phone screen. Once again, open for debate. The key concept here is being unintrusive.
+
+
+AUDIO DESIGN
+-----------
+
+I literally haven't put any thought into this. We're going to need some serious expansion here, audio makes or breaks a game. Perhaps mostly ambient sound in the background to begin with,
+gradually fading into more and more intense/disturbing music as the game progresses?
+
+
+With all of that said and done, I'm going to move on to story. This is going to be written somewhat like a screen play. I only have the very first scenario concretely done, but ideas for the rest
+are circulating.
+
+STORY
+-----
+
+NOTE: Much of the game is going to revolve around warehouses, I think. This is to make it easier to reuse assets, as well as make it more jarring as we transition into blood-punk things. We may
+have a stage or two that takes place outside of them.
+
+
+-----
+
+Area One:
+
+<The screen fades in from black. The player is laying face down, a stack of boxes blocking him in from behind. He's in a dimly-lit warehouse, stacks of boxes and crates everywhere. The occasional
+camera sticks out from the ceiling, a blinking red light indicating their activity.  In the small clearing that he's in, there's an inert phone laying on a box. After a moment, it begins to vibrate,
+ and the screen casts a blue glow. The player gets up to his feet. Player control begins.>
+
+<The player walks over to the box, which prompts a small space bar to fade into existence above the phone, as a clue.The player picks it up, and look at the screen. The call is from an unknown source. 
+All missions should start with accepting the call. Please remember that the player is free to move/navigate while this dialog is happening, and as such, it progresses on a timer, rather than button press.>
+
+<During this time, the player is expected to be familiarizing themselves with movement, interacting with various little distractions along the way, and getting used to climbing up/down boxes with the W and S
+keys. As the player progresses forward, the sound of an engine idling in the distance should grow louder>
+
+Operator: "Hello."
+"I see you've awoken. How fortunate."
+"I know you're a bit disgruntled by your current predicament, but we'll have to look past that for the moment."
+"If you haven't already, you should start making your way forward. The picture is a bit grainy, I'll adjust it as we go."
+
+<There's a brief pause.>
+
+"I'm sure you're probably wondering what's expected of you."
+"Don't worry. It's nothing that won't come naturally."
+"Think of yourself as a helping hand. You're going to make life easier for us."
+
+<The player should, during this time, come upon a crate along flat ground. This particular crate should have a grip bar on either side of it, indicating that it can not only be climbed, but interacted with.
+The player will push this crate forward to climb a stack of boxes, at the top of which is a lever inside of a breaker box. When pulled, the camera transitions to the side, as the lights in that section of the
+warehouse suddenly turn on. A door, now in view of the screen, slides open, revealing a woman standing outside. She looks quite perturbed -- significantly more so as the sound of the idling engine suddenly roars
+into life. The truck that's been sitting on-screen suddenly turns on its headlights and floors it. The woman explodes into a shower of bits.>
+
+Player: "...!"
+
+Operator: "There you go."
+"You didn't even require instruction. Good job."
+
+<The screen begins fading to black>
+
+"I think you're going to be a valuable asset to us."
+
+---------------
+
+Obviously, it's not very involved yet. The whole idea is to start the player almost entirely uninvolved -- getting their feet wet. They're just an accessory to the murder, not an integral part of it. The level of
+involvement will increase moving forward. 
+
+
+
+
+
+
+
+------------------------
+
+
+
+That's all I have right this moment. There's a lot in this document, so there's probably a lot to discuss as a group -- I'll continue to push forard with the story as time goes on. With my ideas for the game laid out,
+story should come a lot more naturally (and a lot more quickly) from this point forward.
