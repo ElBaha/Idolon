@@ -2,8 +2,7 @@
 #include "Level.h"
 #include <SDL2/SDL.h>
 #include "GameOptions.h"
-
-#define ACCELERATION .0001
+#include "TweakableMechanics.h"
 
 int gameInput(bool &quit){
     SDL_Event event;
@@ -34,11 +33,11 @@ int gameInput(bool &quit){
                         mainCam.vel.z=-1;
                         }*/
                     if (event.key.keysym.sym == SDLK_a){
-						theLevel->player->accelX = -ACCELERATION;
+						theLevel->player->accelX = -player_acceleration;
 
                         }
                     if (event.key.keysym.sym == SDLK_d){
-						theLevel->player->accelX = ACCELERATION;
+						theLevel->player->accelX = player_acceleration;
                         }
 
 

@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "StatSprite.h"
 #include "BoneSprite.h"
+#include "TweakableMechanics.h"
 
 Entity::Entity() {
 	// Temporary, initializes the player
@@ -15,7 +16,6 @@ Entity::Entity() {
 	bbRot = 0.;
 	bbWidth = 10.;
 	bbHeight = 100.;
-	gravity = 0.;
 	fixed = false;
 }
 
@@ -28,7 +28,6 @@ Entity::Entity(string t, float x, float y, float w, float h, float r) {
 	bbWidth = w;
 	bbHeight = h;
 	bbRot = r;
-	gravity = 0.;
 	fixed = true;
 }
 
@@ -57,28 +56,33 @@ void Entity::collides(const Entity * e) {
 	} else {
 		posY -= dy;
 		deltaY = 0.;
-		gravity = 0.;
 	}
 
 	// friction
-	deltaX *= .999;
-	deltaY *= .999;
+	deltaX *= friction_x;
+	deltaY *= friction_y;
 }
 
 void Entity::update(const Level * l) {
 	// adjust for gravity
 	if (!fixed) {
-		gravity += .001;
+		deltaY -= gravity_acceleration;
 	}
 
 	// update position
 	deltaX += accelX;
 	deltaY += accelY;
+
+	if ( deltaX >  max_delta_x) deltaX =  max_delta_x;
+	if (-deltaX < -max_delta_x) deltaX = -max_delta_x;
+	if ( deltaY >  max_delta_y) deltaY =  max_delta_y;
+	if (-deltaY < -max_delta_y) deltaY = -max_delta_y;
+
 	posX += deltaX;
-	posY += deltaY - gravity;
+	posY += deltaY;
 
 	// don't bother to check collision if we don't move
-	if (deltaX || deltaY || gravity) {
+	if (deltaX || deltaY) {
 		// adjust for collisions
 		for (int i = 0; i < l->entities.size(); i++) {
 			collides(l->entities[i]);

@@ -13,7 +13,6 @@ class Entity
 	float posX, posY;
 	float bbRot;
 	float bbWidth, bbHeight;
-	float gravity;
 
 protected:
 	void collides(const Entity *);

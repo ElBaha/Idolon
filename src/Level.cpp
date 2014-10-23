@@ -6,6 +6,7 @@
 #include "Textures.h"
 #include "Input.h"
 #include "StatSprite.h"
+#include "TweakableMechanics.h"
 
 Level* theLevel = NULL;
 
@@ -58,6 +59,8 @@ void Level::run(SDL_Window* window) {
     bool quit=false;
     float fade=0;
 
+    int ticks, pticks = SDL_GetTicks();
+
     while(!quit) {
         SDL_Delay(20);
         gameInput(quit);
@@ -90,9 +93,12 @@ void Level::run(SDL_Window* window) {
             entities[i]->render(viewMatrix);
         }
 
-//printf("%s\n",gluErrorString(glGetError()));
-
         SDL_GL_SwapWindow(window);
+
+        ticks = SDL_GetTicks();
+        if (ticks - pticks < ticks_per_frame)
+            SDL_Delay(ticks_per_frame - (ticks - pticks));
+        pticks = ticks;
     }
 
 }
