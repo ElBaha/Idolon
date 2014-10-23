@@ -6,6 +6,8 @@ The level commands are structured as follows:
 
 Where C is a character specifying the command to use, and arg1, arg2, and so forth are arbitrary length strings.
 
+The ids should be unique.
+
 Commands
 --------
 
@@ -15,12 +17,12 @@ Commands
 
 - Specify the coordinates of an invisible bounding box:
 
-  `b <x> <y> <width> <height>`
+  `b <id> <x> <y> <width> <height>`
 
 - Specify a static sprite with collision:
 
-  `s <image> <x> <y> <width> <height>`
+  `s <id> <image> <x> <y> <width> <height>`
 
 - Specify a static sprite without collision:
 
-  `S <image> <x> <y> <width> <height>`
+  `S <id> <image> <x> <y> <width> <height>`
