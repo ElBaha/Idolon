@@ -34,10 +34,12 @@ int gameInput(bool &quit){
                         }*/
                     if (event.key.keysym.sym == SDLK_a){
 						theLevel->player->accel.x = -player_acceleration;
+						theLevel->player->setAnim(ANIM_WALK);
 
                         }
                     if (event.key.keysym.sym == SDLK_d){
 						theLevel->player->accel.x = player_acceleration;
+						theLevel->player->setAnim(ANIM_WALK);
                         }
 
 
@@ -52,10 +54,12 @@ int gameInput(bool &quit){
                         }
                     if (event.key.keysym.sym == SDLK_a){
 						theLevel->player->accel.x = 0.;
+						theLevel->player->setAnim(ANIM_IDLE);
 
                         }
                     if (event.key.keysym.sym == SDLK_d){
 						theLevel->player->accel.x = 0.;
+						theLevel->player->setAnim(ANIM_IDLE);
                         }
 
 

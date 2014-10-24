@@ -20,7 +20,7 @@ public:
         tmp=tmp%(int)(((max-min)/speed)*2000);
 
         float p=((max-min)/speed)*1000;
-
+	//cout<<tmp/1000.0<<" "<<p<<endl;
         if(tmp>p)
             return max-((tmp-p)/1000.0)*speed;
         else
@@ -35,9 +35,27 @@ public:
 
 class MirrorPredictor:public Predictor {
 public:
-    MirrorPredictor();
+    MirrorPredictor(Predictor* p):other(p){}
 
-    virtual float pred(int time)=0;
+    virtual float pred(int time){
+	return -other->pred(time);
+    }
+
+    Predictor* other;
+};
+
+class HalfPredictor:public Predictor {
+public:
+    HalfPredictor(Predictor* p):other(p){}
+
+    virtual float pred(int time){
+	float t=-other->pred(time);
+	if(t<0)
+	return t;
+	return 0;
+    }
+
+    Predictor* other;
 };
 
 class StaticPredictor:public Predictor {

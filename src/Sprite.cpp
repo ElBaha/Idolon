@@ -2,7 +2,7 @@
 
 Sprite::Sprite()
 {
-    //ctor
+    state=0;
 }
 
 Sprite::~Sprite()

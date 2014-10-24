@@ -25,6 +25,7 @@ public:
 
 	void update(const Level *);
 	void render(glm::mat4 view);
+	void setAnim(int s);
 
 	bool fixed;
 	glm::vec2 accel;

@@ -86,6 +86,10 @@ void Entity::update(const Level * l) {
 	}
 }
 
+void Entity::setAnim(int s){
+	sprite->setState(s);
+}
+
 void Entity::render(glm::mat4 view) {
 	sprite->render(view, pos.x, pos.y);
 }

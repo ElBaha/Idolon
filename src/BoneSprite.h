@@ -6,6 +6,7 @@
 #include "Predictor.h"
 #include <list>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -17,7 +18,7 @@ public:
     Bone(string s,float x, float y){tex=s;sx=x;sy=y;}
 	~Bone();
 
-    void render(GLuint vao,glm::mat4 model);
+    void render(GLuint vao,glm::mat4 model,int state);
 
     string tex;
     //size x,y
@@ -29,7 +30,7 @@ class Joint{
 public:
     Joint(Bone b, float a);
 	~Joint();
-    void update();
+    void update(int state);
 
     Bone bone;
     float angle;
@@ -39,7 +40,7 @@ public:
     //this affix point
     float tx,ty;
 
-	Predictor* pre;
+	vector<Predictor*> pre;
     float speed;
     int type;
 
@@ -50,6 +51,7 @@ public:
     BoneSprite();
     virtual ~BoneSprite();
     virtual void render(glm::mat4 view,float x, float y);
+    virtual void setState(int s);
 
     vao::UpperCornerSquare vao;
     Bone base;
