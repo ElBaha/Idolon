@@ -65,25 +65,27 @@ void Level::run(SDL_Window* window) {
         SDL_Delay(20);
         gameInput(quit);
 
+        camX=-player->pos.x+50;
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glm::mat4 viewMatrix = glm::translate(glm::mat4(),glm::vec3(camX,camY,0));
 
         glm::mat4 temp;
         glUseProgram(getShader("sprite"));
         GLuint tempLoc=glGetUniformLocation(getShader("sprite"), "viewMatrix");
-        glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
+        glUniformMatrix4fv(tempLoc,1, GL_FALSE,&viewMatrix[0][0]);
         tempLoc=glGetUniformLocation(getShader("sprite"), "fade");
         glUniform1f(tempLoc,fade);
         if(fade<1)
             fade+=.002;
 
-        temp = glm::translate(glm::mat4(),glm::vec3(50.0,50.0,0));
-        temp = glm::scale(temp,glm::vec3(50.0,50.0,0));
+        temp = glm::translate(glm::mat4(),glm::vec3(200.0,100.0,0));
+        temp = glm::scale(temp,glm::vec3(200.0,100.0,0));
         tempLoc=glGetUniformLocation(getShader("sprite"), "modelMatrix");
         glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
 
         glBindVertexArray(bg.vao);
-        glBindTexture(GL_TEXTURE_2D,getTexture("back"));
+        glBindTexture(GL_TEXTURE_2D,getTexture("L1"));
         glDrawArrays(GL_QUADS,0,4);
         glBindVertexArray(0);
 
