@@ -69,7 +69,7 @@ int main ( int argc, char** argv ) {
 	l.player = new Entity();
 	l.player->fixed = false;
 	l.entities.push_back(l.player);
-	l.entities.push_back(new Entity("outline", 10, 0, 80, 20));
+	l.entities.push_back(new Entity("outline", 10, 0, 80, 9));
     l.run(screen);
 
 

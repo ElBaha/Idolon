@@ -45,7 +45,7 @@ void Entity::collides(const Entity * e) {
 	float dx = abs(dx1) < abs(dx2) ? dx1 : dx2;
 	float dy = abs(dy1) < abs(dy2) ? dy1 : dy2;
 
-	if (abs(dx) < abs(dy)) {
+	if (abs(dx) < abs(dy)-10) {
 		pos.x -= dx;
 		if (dx < 0 && delta.x < 0) delta.x = 0.;
 		if (dx > 0 && delta.x > 0) delta.x = 0.;
@@ -73,6 +73,8 @@ void Entity::update(const Level * l) {
 	if (-delta.x < -max_delta_x) delta.x = -max_delta_x;
 	if ( delta.y >  max_delta_y) delta.y =  max_delta_y;
 	if (-delta.y < -max_delta_y) delta.y = -max_delta_y;
+
+	if(delta.y+pos.y<0) delta.y=0;
 
 	pos.x += delta.x;
 	pos.y += delta.y;
