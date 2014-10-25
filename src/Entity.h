@@ -15,6 +15,7 @@ public:
 	Sprite * sprite;
 	float angle;
 	glm::vec2 pos, delta, box;
+	Entity* heldObject;
 
 protected:
 	void collides(const Entity *);

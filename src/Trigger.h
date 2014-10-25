@@ -25,13 +25,15 @@ struct Result {
 	enum Type {
 		DIALOGUE,
 		ENABLE,
-		DISABLE
+		DISABLE,
+		DELTA
 	};
 
 	Type type;
 
 	int arg_in;
 	std::string arg_str;
+	float arg_x, arg_y;
 
 	void exec(Level &);
 };

@@ -55,16 +55,40 @@ void Level::setup() {
     glUniform1i(tempLoc,0);
     tempLoc=glGetUniformLocation(getShader("ui"), "textColor");
     glUniform3f(tempLoc,1,0,0);
-    tempLoc=glGetUniformLocation(getShader("ui"), "mode");
-    glUniform1i(tempLoc,2);
+    
 }
 
 void Level::renderStat(){
+	
 
-	glm::mat4 temp=glm::translate(glm::mat4(),glm::vec3(40,96,5));
+
 	glUseProgram(getShader("ui"));
-        GLuint tempLoc=glGetUniformLocation(getShader("ui"), "modelMatrix");
+
+	GLuint tempLoc=glGetUniformLocation(getShader("ui"), "mode");
+        glUniform1i(tempLoc,0);
+	
+	glm::mat4 temp; 
+	temp = glm::translate(glm::mat4(),glm::vec3(50,95,0));
+	temp = glm::scale(temp,glm::vec3(25,5,0));
+        tempLoc=glGetUniformLocation(getShader("ui"), "modelMatrix");
+        glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]); 
+         
+	glBindVertexArray(bg.vao);
+        glBindTexture(GL_TEXTURE_2D,getTexture("phoneText"));
+        glDrawArrays(GL_QUADS,0,4);
+        glBindVertexArray(0);
+
+
+
+	temp=glm::translate(glm::mat4(),glm::vec3(40,96,5));
+	
+        tempLoc=glGetUniformLocation(getShader("ui"), "modelMatrix");
         glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
+	tempLoc=glGetUniformLocation(getShader("ui"), "mode");
+        glUniform1i(tempLoc,2);
+
+
+
 
 	TextRenderer rend("TextAB");
 	rend.setRenderSize(2,3);
@@ -105,6 +129,17 @@ void Level::load(const char * filename) {
 			assert(6 == fscanf(f, " %512s %512s %g %g %g %g\n", idcs, buf, &x, &y, &w, &h));
 			id = std::string(idcs);
 			entities[id] = new Entity(string(buf), x, y, w, h);
+			break;
+		case 'S':
+			assert(6 == fscanf(f, " %512s %512s %g %g %g %g\n", idcs, buf, &x, &y, &w, &h));
+			id = std::string(idcs);
+			entities[id] = new Entity(string(buf), x, y, w, h);
+			entities[id]->collidable = false;
+			break;
+		case 'p':
+			assert(2 == fscanf(f, " %g %g\n", &x, &y));
+			player->pos.x = x;
+			player->pos.y = y;
 			break;
 		case 'c':
 			Condition cond;
@@ -164,6 +199,13 @@ void Level::load(const char * filename) {
 				id2 = std::string(id2cs);
 				res.type = Result::DISABLE;
 				res.arg_str = id2;
+			} else
+			if (!strcmp(buf, "delta")) {
+				assert(3 == fscanf(f," %512s %g %g\n", id2cs, &x, &y));
+				res.type = Result::DELTA;
+				res.arg_x = x;
+				res.arg_y = y;
+				res.arg_str = std::string(id2cs);
 			} else {
 				assert(0);
 			}
