@@ -8,13 +8,15 @@ class Entity;
 #include "Level.h"
 #include "Sprite.h"
 #include "StatSprite.h"
+#include "Rect.h"
 
 class Entity
 {
     public:
 	Sprite * sprite;
 	float angle;
-	glm::vec2 pos, delta, box;
+	glm::vec2 delta;
+	Rect rect;
 
 protected:
 	void collides(const Entity *);
@@ -22,6 +24,7 @@ protected:
 public:
 	Entity();
 	Entity(string t, float x, float y, float w, float h);
+	Entity(string t, Rect r);
 	~Entity();
 
 	void update(const Level *);

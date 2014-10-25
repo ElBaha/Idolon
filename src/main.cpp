@@ -70,6 +70,10 @@ int main ( int argc, char** argv ) {
 	l.player->fixed = false;
 	l.entities.push_back(l.player);
 	l.entities.push_back(new Entity("outline", 10, 0, 80, 9));
+	l.entities.push_back(new Entity("crate", 150, 10, 10, 10));
+	//l.entities.push_back(new Entity("crate", 150, 0, 10, 10));
+	//l.entities.push_back(new Entity("crate", 180, 0, 10, 10));
+	//l.entities.push_back(new Entity("crate", 170, 0, 10, 10));
     l.run(screen);
 
 

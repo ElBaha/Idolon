@@ -43,6 +43,10 @@ void Level::setup() {
     glUseProgram(getShader("sprite"));
     GLuint tempLoc=glGetUniformLocation(getShader("sprite"), "projectionMatrix");
     glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
+    tempLoc=glGetUniformLocation(getShader("ui"), "projectionMatrix");
+    glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
+    tempLoc=glGetUniformLocation(getShader("basic"), "projectionMatrix");
+    glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
     tempLoc=glGetUniformLocation(getShader("sprite"), "sampler");
     glUniform1i(tempLoc,0);
     tempLoc=glGetUniformLocation(getShader("sprite"), "fColor");
@@ -65,7 +69,7 @@ void Level::run(SDL_Window* window) {
         SDL_Delay(20);
         gameInput(quit);
 
-        camX=-player->pos.x+50;
+        camX=-player->rect.org().x+50;
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glm::mat4 viewMatrix = glm::translate(glm::mat4(),glm::vec3(camX,camY,0));

@@ -178,21 +178,26 @@ GLuint getShader(string s){
 return shaders[s];
 }
 
-void setupVAO(GLfloat *texCoords, int texSize, GLfloat *vertexCoords, int verSize, GLuint &vao, GLuint (&vbo)[2]){
+void setupVAO(GLfloat *texCoords, int texSize, GLfloat *colors, int colSize, GLfloat *vertexCoords, int verSize, GLuint &vao, GLuint (&vbo)[3]){
 
 glGenVertexArrays(1,&vao);
 	glBindVertexArray(vao);
 
-	glGenBuffers(2,vbo);
+	glGenBuffers(3,vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*verSize,vertexCoords,GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
+	
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*colSize,colors,GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*texSize,texCoords,GL_STATIC_DRAW);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0);

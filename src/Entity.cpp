@@ -1,18 +1,20 @@
 #include <stdlib.h>
+#include <iostream>
 #include "Entity.h"
 #include "StatSprite.h"
 #include "BoneSprite.h"
 #include "TweakableMechanics.h"
+#include "Rect.h"
 
 Entity::Entity() {
 	// Temporary, initializes the player
 	sprite = new BoneSprite();
 	delta.x = delta.y = 0.;
 	accel.x = accel.y = 0.;
-	pos.x = 40.;
-	pos.y = 120.;
-	box.x = 10.;
-	box.y = 100.;
+	rect.org().x = 40.;
+	rect.org().y = 120.;
+	rect.dim().x = 10.;
+	rect.dim().y = 20.;
 	fixed = false;
 }
 
@@ -20,10 +22,18 @@ Entity::Entity(string t, float x, float y, float w, float h) {
 	sprite = new StatSprite(t, w, h);
 	delta.x = delta.y = 0.;
 	accel.x = accel.y = 0.;
-	pos.x = x;
-	pos.x = y;
-	box.x = w;
-	box.y = h;
+	rect.org().x = x;
+	rect.org().y = y;
+	rect.dim().x = w;
+	rect.dim().y = h;
+	fixed = true;
+}
+
+Entity::Entity(string t, Rect r) {
+	sprite = new StatSprite(t, r.dim().x, r.dim().y);
+	delta.x = delta.y = 0.;
+	accel.x = accel.y = 0.;
+	rect = r;
 	fixed = true;
 }
 
@@ -33,30 +43,36 @@ Entity::~Entity() {
 
 void Entity::collides(const Entity * e) {
 	if (e == this) return;
-	if (e->pos.x >= pos.x + box.x || pos.x >= e->pos.x + e->box.x) return;
-	if (e->pos.y >= pos.y + box.y || pos.y >= e->pos.y + e->box.y) return;
+	
+	HitRec rec = rect.testHit(e->rect);
+	//std::cout<<"HIT INFO: "<<rec.hit<<" "<<rec.d.x<<" "<<rec.d.y<<std::endl;
+	if(!rec.hit) return;
 
 	// have a collision, adjust for it
-	float dx1 = -(e->pos.x + e->box.x) + pos.x;
-	float dx2 = -e->pos.x + (e->pos.x + e->box.x);
-	float dy1 = -(e->pos.y + e->box.y) + pos.y;
-	float dy2 = -e->pos.y + (e->pos.y + e->box.y);
-
-	float dx = abs(dx1) < abs(dx2) ? dx1 : dx2;
-	float dy = abs(dy1) < abs(dy2) ? dy1 : dy2;
-
-	if (abs(dx) < abs(dy)-10) {
-		pos.x -= dx;
-		if (dx < 0 && delta.x < 0) delta.x = 0.;
-		if (dx > 0 && delta.x > 0) delta.x = 0.;
-	} else {
-		pos.y -= dy;
-		delta.y = 0.;
+	if(rec.hit&HIT_BOTTOM) {
+		rect.org().y+=rec.d.y;
 	}
-
-	// friction
-	delta.x *= friction_x;
-	delta.y *= friction_y;
+	if(rec.hit&HIT_TOP) {
+		rect.org().y-=rec.d.y;
+	}
+	if(rec.hit & (HIT_TOP|HIT_BOTTOM)) {
+		delta.y=0;
+		//std::cout<<"HIT VERTICALLY: "<<rec.d.y<<std::endl;
+	}
+	if(rec.hit&HIT_LEFT) {
+		rect.org().x+=rec.d.x;
+	}
+	if(rec.hit&HIT_RIGHT) {
+		rect.org().x-=rec.d.x;
+	}
+	if(rec.hit & (HIT_LEFT|HIT_RIGHT)) {
+		delta.x=0;
+		if(const_cast<Entity *>(e)->rect.opp().y-rect.org().y<=step_height) {
+			rect.org().y+=rec.d.y;
+			delta.y+=0.05; //Unstick
+			//std::cout<<"HIT SIDEWAYS: "<<rec.d.y<<" UP"<<std::endl;
+		}
+	}
 }
 
 void Entity::update(const Level * l) {
@@ -65,27 +81,30 @@ void Entity::update(const Level * l) {
 		delta.y -= gravity_acceleration;
 	}
 
+	// friction
+	delta.x*=friction_x;
+	delta.y*=friction_y;
+
 	// update position
-	delta.x += accel.x;
-	delta.y += accel.y;
+	delta+=accel;
 
 	if ( delta.x >  max_delta_x) delta.x =  max_delta_x;
 	if (-delta.x < -max_delta_x) delta.x = -max_delta_x;
 	if ( delta.y >  max_delta_y) delta.y =  max_delta_y;
 	if (-delta.y < -max_delta_y) delta.y = -max_delta_y;
 
-	if(delta.y+pos.y<0) delta.y=0;
+	if(delta.y+rect.org().y<0) delta.y=-rect.org().y;
 
-	pos.x += delta.x;
-	pos.y += delta.y;
+	rect.translate(delta);
+	//std::cout<<rect.org().x<<" "<<rect.org().y<<std::endl;
 
 	// don't bother to check collision if we don't move
-	if (delta.x || delta.y) {
+	// if (delta.x || delta.y) {
 		// adjust for collisions
 		for (int i = 0; i < l->entities.size(); i++) {
 			collides(l->entities[i]);
 		}
-	}
+	// }
 }
 
 void Entity::setAnim(int s){
@@ -93,6 +112,7 @@ void Entity::setAnim(int s){
 }
 
 void Entity::render(glm::mat4 view) {
-	sprite->render(view, pos.x, pos.y);
+	sprite->render(view, rect.org().x, rect.org().y);
+	rect.render(view);
 }
 
