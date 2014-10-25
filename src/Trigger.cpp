@@ -23,10 +23,10 @@ void Result::exec(Level & l) {
 		cout << arg_str << endl;
 		break;
 	case ENABLE:
-		l.triggers[arg_in]->enabled = true;
+		l.triggers[arg_str]->enabled = true;
 		break;
 	case DISABLE:
-		l.triggers[arg_in]->enabled = false;
+		l.triggers[arg_str]->enabled = false;
 		break;
 	}
 }

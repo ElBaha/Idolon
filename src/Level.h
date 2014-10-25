@@ -28,8 +28,8 @@ public:
     vao::CenterSquare fg;
 
 	Entity * player;
-	std::map<int, Entity *> entities;
-	std::map<int, Trigger *> triggers;
+	std::map<std::string, Entity *> entities;
+	std::map<std::string, Trigger *> triggers;
 };
 
 extern Level* theLevel;
