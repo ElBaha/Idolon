@@ -51,16 +51,40 @@ void Level::setup() {
     glUniform1i(tempLoc,0);
     tempLoc=glGetUniformLocation(getShader("ui"), "textColor");
     glUniform3f(tempLoc,1,0,0);
-    tempLoc=glGetUniformLocation(getShader("ui"), "mode");
-    glUniform1i(tempLoc,2);
+    
 }
 
 void Level::renderStat(){
+	
 
-	glm::mat4 temp=glm::translate(glm::mat4(),glm::vec3(40,96,5));
+
 	glUseProgram(getShader("ui"));
-        GLuint tempLoc=glGetUniformLocation(getShader("ui"), "modelMatrix");
+
+	GLuint tempLoc=glGetUniformLocation(getShader("ui"), "mode");
+        glUniform1i(tempLoc,0);
+	
+	glm::mat4 temp; 
+	temp = glm::translate(glm::mat4(),glm::vec3(50,95,0));
+	temp = glm::scale(temp,glm::vec3(25,5,0));
+        tempLoc=glGetUniformLocation(getShader("ui"), "modelMatrix");
+        glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]); 
+         
+	glBindVertexArray(bg.vao);
+        glBindTexture(GL_TEXTURE_2D,getTexture("phoneText"));
+        glDrawArrays(GL_QUADS,0,4);
+        glBindVertexArray(0);
+
+
+
+	temp=glm::translate(glm::mat4(),glm::vec3(40,96,5));
+	
+        tempLoc=glGetUniformLocation(getShader("ui"), "modelMatrix");
         glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
+	tempLoc=glGetUniformLocation(getShader("ui"), "mode");
+        glUniform1i(tempLoc,2);
+
+
+
 
 	TextRenderer rend("TextAB");
 	rend.setRenderSize(2,3);
