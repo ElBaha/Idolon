@@ -68,6 +68,10 @@ void Level::load(const char * filename) {
 		case '#':
 			while (fgetc(f) != '\n' && !feof(f));
 			break;
+		case 'B':
+			assert(3 == fscanf(f, " %512s %g %g\n", buf, &bg_width, &bg_height));
+			bg_name = string(buf);
+			break;
 		case 's':
 			int id;
 			float x, y, w, h;
@@ -106,13 +110,13 @@ void Level::run(SDL_Window* window) {
         if(fade<1)
             fade+=.002;
 
-        temp = glm::translate(glm::mat4(),glm::vec3(200.0,100.0,0));
-        temp = glm::scale(temp,glm::vec3(200.0,100.0,0));
+        temp = glm::translate(glm::mat4(),glm::vec3(bg_width,bg_height,0));
+        temp = glm::scale(temp,glm::vec3(bg_width,bg_height,0));
         tempLoc=glGetUniformLocation(getShader("sprite"), "modelMatrix");
         glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
 
         glBindVertexArray(bg.vao);
-        glBindTexture(GL_TEXTURE_2D,getTexture("L1"));
+        glBindTexture(GL_TEXTURE_2D,getTexture(bg_name));
         glDrawArrays(GL_QUADS,0,4);
         glBindVertexArray(0);
 
