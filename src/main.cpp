@@ -74,7 +74,7 @@ int main ( int argc, char** argv ) {
 	l.player = new Entity();
 	l.player->fixed = false;
 
-	l.entities[0] = l.player;
+	l.entities["player"] = l.player;
 	l.load("Levels/1"); // TODO ideally don't use a relative path
 
     l.run(screen);

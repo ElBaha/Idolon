@@ -7,6 +7,7 @@
 #include "Input.h"
 #include "StatSprite.h"
 #include "TweakableMechanics.h"
+#include "GameOptions.h"
 
 #include <iostream>
 using namespace std;
@@ -23,15 +24,18 @@ Level::~Level() {
     //if(player)
     //delete player;
 
-    for(int x=0; x<entities.size(); x++)
-        delete entities[x];
+    for(map<std::string, Entity *>::iterator it=entities.begin(); it!=entities.end(); it++)
+        delete it->second;
+        
+    for(map<std::string, Trigger *>::iterator it=triggers.begin(); it!=triggers.end(); it++)
+    	delete it->second;
 }
 
 void Level::setup() {
     glClearColor(.5, .5, 1, 1);
 
     glm::mat4 temp;
-    temp=glm::ortho(0.0,100.0,0.0,100.0,-50.0,50.0);
+    temp=glm::ortho(0.0,100.0*GAME_RESX/GAME_RESY,0.0,100.0,-50.0,50.0);
 
     glUseProgram(getShader("sprite"));
     GLuint tempLoc=glGetUniformLocation(getShader("sprite"), "projectionMatrix");
@@ -105,7 +109,14 @@ void Level::load(const char * filename) {
 
 	// TODO fix so entities don't overwrite each other (potential lost memory during lod)
 	while (!feof(f)) {
+		char idcs[512];
+		std::string id;
+		char id2cs[512];
+		std::string id2;
+		float x, y, w, h;
+		Result res;
 		int c = fgetc(f);
+
 		switch (c) {
 		case '#':
 			while (fgetc(f) != '\n' && !feof(f));
@@ -115,11 +126,97 @@ void Level::load(const char * filename) {
 			bg_name = string(buf);
 			break;
 		case 's':
-			int id;
-			float x, y, w, h;
-			assert(6 == fscanf(f, " %d %512s %g %g %g %g\n", &id, buf, &x, &y, &w, &h));
+			assert(6 == fscanf(f, " %512s %512s %g %g %g %g\n", idcs, buf, &x, &y, &w, &h));
+			id = std::string(idcs);
 			entities[id] = new Entity(string(buf), x, y, w, h);
 			break;
+		case 'S':
+			assert(6 == fscanf(f, " %512s %512s %g %g %g %g\n", idcs, buf, &x, &y, &w, &h));
+			id = std::string(idcs);
+			entities[id] = new Entity(string(buf), x, y, w, h);
+			entities[id]->collidable = false;
+			break;
+		case 'p':
+			assert(2 == fscanf(f, " %g %g\n", &x, &y));
+			player->pos.x = x;
+			player->pos.y = y;
+			break;
+		case 'c':
+			Condition cond;
+			assert(2 == fscanf(f, " %512s %s", idcs, buf));
+			id = std::string(idcs);
+
+			if (triggers[id] == NULL) {
+				triggers[id] = new Trigger;
+			}
+
+			if (!strcmp(buf, "x-before")) {
+				assert(1 == fscanf(f, " %g\n", &x));
+				cond.type = Condition::X_BEFORE;
+				cond.value = x;
+			} else
+			if (!strcmp(buf, "x-after")) {
+				assert(1 == fscanf(f, " %g\n", &x));
+				cond.type = Condition::X_AFTER;
+				cond.value = x;
+			} else
+			if (!strcmp(buf, "y-before")) {
+				assert(1 == fscanf(f, " %g\n", &x));
+				cond.type = Condition::Y_BEFORE;
+				cond.value = x;
+			} else
+			if (!strcmp(buf, "y-after")) {
+				assert(1 == fscanf(f, " %g\n", &x));
+				cond.type = Condition::Y_AFTER;
+				cond.value = x;
+			} else {
+				assert(0); // TODO don't be lazy
+			}
+
+			triggers[id]->conditions.push_back(cond);
+			break;
+		case 'r':
+			assert(2 == fscanf(f, " %512s %s", idcs, buf));
+			id = std::string(idcs);
+
+			if (triggers[id] == NULL) {
+				triggers[id] = new Trigger;
+			}
+
+			if (!strcmp(buf, "dialogue")) {
+				assert(1 == fscanf(f, " %s\n", buf));
+				res.type = Result::DIALOGUE;
+				res.arg_str = string(buf);
+			} else
+			if (!strcmp(buf, "enable")) {
+				assert(1 == fscanf(f, " %512s\n", id2cs));
+				id2 = std::string(id2cs);
+				res.type = Result::ENABLE;
+				res.arg_str = id2;
+			} else
+			if (!strcmp(buf, "disable")) {
+				assert(1 == fscanf(f, " %512s\n", id2cs));
+				id2 = std::string(id2cs);
+				res.type = Result::DISABLE;
+				res.arg_str = id2;
+			} else
+			if (!strcmp(buf, "delta")) {
+				assert(3 == fscanf(f," %512s %g %g\n", id2cs, &x, &y));
+				res.type = Result::DELTA;
+				res.arg_x = x;
+				res.arg_y = y;
+				res.arg_str = std::string(id2cs);
+			} else {
+				assert(0);
+			}
+
+			triggers[id]->results.push_back(res);
+			break;
+		case '\n':
+			break;
+		default:
+			fprintf(stderr, "Don't know the level file command '%c'.\n", c);
+			exit(EXIT_FAILURE);
 		}
 	}
 
@@ -135,7 +232,7 @@ void Level::run(SDL_Window* window) {
     int ticks, pticks = SDL_GetTicks();
 
     while(!quit) {
-        SDL_Delay(20);
+		SDL_Delay(20);
         gameInput(quit);
 
         camX=-player->pos.x+50;
@@ -163,11 +260,14 @@ void Level::run(SDL_Window* window) {
         glBindVertexArray(0);
 
 
-        for (map<int, Entity *>::iterator it = entities.begin(); it != entities.end(); ++it) {
+        for (map<std::string, Entity *>::iterator it = entities.begin(); it != entities.end(); ++it) {
             it->second->update(this);
             it->second->render(viewMatrix);
         }
 
+		for (map<std::string, Trigger *>::iterator it = triggers.begin(); it != triggers.end(); ++it) {
+            it->second->attempt(*this);
+        }
 	renderStat();
 
         SDL_GL_SwapWindow(window);
@@ -182,9 +282,9 @@ void Level::run(SDL_Window* window) {
 
 void Level::use(){
 
-	for (int i = 0; i < entities.size(); i++) {
-		if(entities[i]->canUse(player))
-            		entities[i]->use(NULL);
+	for (map<std::string, Entity *>::iterator it = entities.begin(); it != entities.end(); ++it) {
+		if(it->second->canUse(player))
+            		it->second->use(NULL);
         }
 
 }

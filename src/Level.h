@@ -8,6 +8,7 @@ class Level;
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include "Entity.h"
+#include "Trigger.h"
 #include "stdvao.h"
 
 class Level {
@@ -27,8 +28,8 @@ public:
     vao::CenterSquare fg;
 
 	Entity * player;
-	std::map<int, Entity *> entities;
-
+	std::map<std::string, Entity *> entities;
+	std::map<std::string, Trigger *> triggers;
 };
 
 extern Level* theLevel;

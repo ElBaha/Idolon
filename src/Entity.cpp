@@ -111,7 +111,7 @@ void Entity::update(const Level * l) {
 	// don't bother to check collision if we don't move
 	if (delta.x || delta.y) {
 		// adjust for collisions
-		for (map<int, Entity *>::const_iterator it = l->entities.begin(); it != l->entities.end(); ++it) {
+		for (map<std::string, Entity *>::const_iterator it = l->entities.begin(); it != l->entities.end(); ++it) {
 			collides(it->second);
 		}
 	}
