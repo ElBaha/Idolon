@@ -23,8 +23,11 @@ Level::~Level() {
     //if(player)
     //delete player;
 
-    for(int x=0; x<entities.size(); x++)
-        delete entities[x];
+    for(map<std::string, Entity *>::iterator it=entities.begin(); it!=entities.end(); it++)
+        delete it->second;
+        
+    for(map<std::string, Trigger *>::iterator it=triggers.begin(); it!=triggers.end(); it++)
+    	delete it->second;
 }
 
 void Level::setup() {
@@ -81,7 +84,10 @@ void Level::load(const char * filename) {
 
 	// TODO fix so entities don't overwrite each other (potential lost memory during lod)
 	while (!feof(f)) {
-		int id;
+		char idcs[512];
+		std::string id;
+		char id2cs[512];
+		std::string id2;
 		float x, y, w, h;
 		Result res;
 		int c = fgetc(f);
@@ -95,12 +101,14 @@ void Level::load(const char * filename) {
 			bg_name = string(buf);
 			break;
 		case 's':
-			assert(6 == fscanf(f, " %d %512s %g %g %g %g\n", &id, buf, &x, &y, &w, &h));
+			assert(6 == fscanf(f, " %512s %512s %g %g %g %g\n", idcs, buf, &x, &y, &w, &h));
+			id = std::string(idcs);
 			entities[id] = new Entity(string(buf), x, y, w, h);
 			break;
 		case 'c':
 			Condition cond;
-			assert(2 == fscanf(f, " %d %s", &id, buf));
+			assert(2 == fscanf(f, " %512s %s", idcs, buf));
+			id = std::string(idcs);
 
 			if (triggers[id] == NULL) {
 				triggers[id] = new Trigger;
@@ -132,8 +140,8 @@ void Level::load(const char * filename) {
 			triggers[id]->conditions.push_back(cond);
 			break;
 		case 'r':
-			int id2;
-			assert(2 == fscanf(f, " %d %s", &id, buf));
+			assert(2 == fscanf(f, " %512s %s", idcs, buf));
+			id = std::string(idcs);
 
 			if (triggers[id] == NULL) {
 				triggers[id] = new Trigger;
@@ -145,14 +153,16 @@ void Level::load(const char * filename) {
 				res.arg_str = string(buf);
 			} else
 			if (!strcmp(buf, "enable")) {
-				assert(1 == fscanf(f, " %d\n", &id2));
+				assert(1 == fscanf(f, " %512s\n", id2cs));
+				id2 = std::string(id2cs);
 				res.type = Result::ENABLE;
-				res.arg_in = id2;
+				res.arg_str = id2;
 			} else
 			if (!strcmp(buf, "disable")) {
-				assert(1 == fscanf(f, " %d\n", &id2));
+				assert(1 == fscanf(f, " %512s\n", id2cs));
+				id2 = std::string(id2cs);
 				res.type = Result::DISABLE;
-				res.arg_in = id2;
+				res.arg_str = id2;
 			} else {
 				assert(0);
 			}
@@ -207,12 +217,12 @@ void Level::run(SDL_Window* window) {
         glBindVertexArray(0);
 
 
-        for (map<int, Entity *>::iterator it = entities.begin(); it != entities.end(); ++it) {
+        for (map<std::string, Entity *>::iterator it = entities.begin(); it != entities.end(); ++it) {
             it->second->update(this);
             it->second->render(viewMatrix);
         }
 
-		for (map<int, Trigger *>::iterator it = triggers.begin(); it != triggers.end(); ++it) {
+		for (map<std::string, Trigger *>::iterator it = triggers.begin(); it != triggers.end(); ++it) {
             it->second->attempt(*this);
         }
 	renderStat();
@@ -229,9 +239,9 @@ void Level::run(SDL_Window* window) {
 
 void Level::use(){
 
-	for (int i = 0; i < entities.size(); i++) {
-		if(entities[i]->canUse(player))
-            		entities[i]->use(NULL);
+	for (map<std::string, Entity *>::iterator it = entities.begin(); it != entities.end(); ++it) {
+		if(it->second->canUse(player))
+            		it->second->use(NULL);
         }
 
 }
