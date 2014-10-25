@@ -8,6 +8,9 @@
 #include "StatSprite.h"
 #include "TweakableMechanics.h"
 
+#include <iostream>
+using namespace std;
+
 Level* theLevel = NULL;
 
 Level::Level() {
@@ -102,5 +105,14 @@ void Level::run(SDL_Window* window) {
             SDL_Delay(ticks_per_frame - (ticks - pticks));
         pticks = ticks;
     }
+
+}
+
+void Level::use(){
+
+	for (int i = 0; i < entities.size(); i++) {
+		if(entities[i]->canUse(player))
+            		entities[i]->use(NULL);
+        }
 
 }

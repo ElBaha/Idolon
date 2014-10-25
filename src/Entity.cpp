@@ -11,9 +11,11 @@ Entity::Entity() {
 	accel.x = accel.y = 0.;
 	pos.x = 40.;
 	pos.y = 120.;
-	box.x = 10.;
+	box.x = 6.;
 	box.y = 20.;
 	fixed = false;
+	collidable=true;
+	use=NULL;
 }
 
 Entity::Entity(string t, float x, float y, float w, float h) {
@@ -25,6 +27,8 @@ Entity::Entity(string t, float x, float y, float w, float h) {
 	box.x = w;
 	box.y = h;
 	fixed = true;
+	collidable=true;
+	use=NULL;
 }
 
 Entity::~Entity() {
@@ -32,7 +36,7 @@ Entity::~Entity() {
 }
 
 void Entity::collides(const Entity * e) {
-	if (e == this) return;
+	if (e == this || !e->collidable) return;
 	if (e->pos.x >= pos.x + box.x || pos.x >= e->pos.x + e->box.x) return;
 	if (e->pos.y >= pos.y + box.y || pos.y >= e->pos.y + e->box.y) return;
 
@@ -57,6 +61,16 @@ void Entity::collides(const Entity * e) {
 	// friction
 	delta.x *= friction_x;
 	delta.y *= friction_y;
+}
+
+bool Entity::canUse(Entity* e){
+	if(!use)
+		return false;
+
+	if (e->pos.x >= pos.x + box.x || pos.x >= e->pos.x + e->box.x*2) return false;
+	if (e->pos.y >= pos.y + box.y || pos.y >= e->pos.y + e->box.y) return false;
+
+	return true;
 }
 
 void Entity::update(const Level * l) {

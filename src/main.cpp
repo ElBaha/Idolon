@@ -13,6 +13,10 @@
 
 #define VERSION "Idolon v0.0"
 
+void ttess(void* u){
+cout<<"Hello"<<endl;
+}
+
 int main ( int argc, char** argv ) {
     // initialize SDL video
     if ( SDL_Init( SDL_INIT_VIDEO /*| SDL_INIT_JOYSTICK*/ ) < 0 ) {
@@ -71,8 +75,9 @@ int main ( int argc, char** argv ) {
 	l.entities.push_back(l.player);
 	l.entities.push_back(new Entity("outline", 10, 0, 80, 9));
 	l.entities.push_back(new Entity("crate", 100, 0, 10, 10));
-	l.entities.push_back(new Entity("crate", 110, 10, 10, 10));
-	//l.entities.push_back(new Entity("crate", 150, 0, 10, 10));
+	l.entities.back()->use=ttess;
+	l.entities.push_back(new Entity("crate", 160, 10, 10, 10));
+	l.entities.push_back(new Entity("crate", 150, 0, 10, 10));
     l.run(screen);
 
 

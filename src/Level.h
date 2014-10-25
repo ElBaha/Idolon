@@ -15,6 +15,7 @@ public:
     ~Level();
     void run(SDL_Window* window);
     void setup();
+	void use();
 
     float camX,camY;
     vao::CenterSquare bg;
