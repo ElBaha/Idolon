@@ -175,6 +175,13 @@ void Level::load(const char * filename) {
 				id2 = std::string(id2cs);
 				res.type = Result::DISABLE;
 				res.arg_str = id2;
+			} else
+			if (!strcmp(buf, "delta")) {
+				assert(3 == fscanf(f," %512s %g %g\n", id2cs, &x, &y));
+				res.type = Result::DELTA;
+				res.arg_x = x;
+				res.arg_y = y;
+				res.arg_str = std::string(id2cs);
 			} else {
 				assert(0);
 			}

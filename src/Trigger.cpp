@@ -28,6 +28,10 @@ void Result::exec(Level & l) {
 	case DISABLE:
 		l.triggers[arg_str]->enabled = false;
 		break;
+	case DELTA:
+		l.entities[arg_str]->delta.x = arg_x;
+		l.entities[arg_str]->delta.y = arg_y;
+		break;
 	}
 }
 
