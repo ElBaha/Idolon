@@ -7,6 +7,7 @@
 #include "Input.h"
 #include "StatSprite.h"
 #include "TweakableMechanics.h"
+#include "GameOptions.h"
 
 #include <iostream>
 using namespace std;
@@ -31,7 +32,7 @@ void Level::setup() {
     glClearColor(.5, .5, 1, 1);
 
     glm::mat4 temp;
-    temp=glm::ortho(0.0,100.0,0.0,100.0,-50.0,50.0);
+    temp=glm::ortho(0.0,100.0*GAME_RESX/GAME_RESY,0.0,100.0,-50.0,50.0);
 
     glUseProgram(getShader("sprite"));
     GLuint tempLoc=glGetUniformLocation(getShader("sprite"), "projectionMatrix");
