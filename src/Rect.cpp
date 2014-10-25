@@ -1,5 +1,6 @@
 #include "Rect.h"
 #include "ShaderHelp.h"
+#include "Textures.h"
 #include <iostream>
 
 #define min(a, b) ((a)<(b)?(a):(b))
@@ -135,19 +136,35 @@ void Rect::render(glm::mat4 view) {
 	GLuint umodelmat=glGetUniformLocation(getShader("basic"), "modelMatrix");
 	
 	glm::mat4 modelmat = glm::translate(glm::mat4(),glm::vec3(origin.x,origin.y,1));
-	modelmat = glm::scale(modelmat, glm::vec3(dimension.x,-dimension.y,0));
+	modelmat = glm::scale(modelmat, glm::vec3(dimension.x,dimension.y,0));
 	
 	glUniformMatrix4fv(umodelmat, 1, GL_FALSE, &modelmat[0][0]);
 	glUniformMatrix4fv(uviewmat, 1, GL_FALSE, &view[0][0]);
-	writeMatrix(std::cout, modelmat);
-	std::cout<<std::endl;
+	//writeMatrix(std::cout, modelmat);
+	//std::cout<<std::endl;
 	glBindVertexArray(vao->vao);
 	glPushAttrib(GL_ENABLE_BIT);
 	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_TEXTURE_2D);
-	glDrawArrays(GL_TRIANGLES, 0, 4);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D,getTexture("dne"));
+	glDrawArrays(GL_LINE_LOOP, 0, 4);
 	glPopAttrib();
 	glBindVertexArray(0);
+	
+	/*glUseProgram(getShader("basic"));
+	    GLuint tempLoc=glGetUniformLocation(getShader("basic"), "viewMatrix");
+	    glUniformMatrix4fv(tempLoc,1, GL_FALSE,&view[0][0]);
+
+	    glm::mat4 temp = glm::translate(glm::mat4(),glm::vec3(origin.x,origin.y,1));
+	    temp = glm::scale(temp, glm::vec3(dimension.x,dimension.y,0));
+
+	    tempLoc=glGetUniformLocation(getShader("basic"), "modelMatrix");
+	    glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
+
+	    glBindVertexArray(vao->vao);
+	    glBindTexture(GL_TEXTURE_2D,getTexture("dne"));
+	    glDrawArrays(GL_QUADS,0,4);
+	    glBindVertexArray(0);*/
 }
 	
 

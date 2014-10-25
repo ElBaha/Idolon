@@ -77,12 +77,12 @@ CornerSquare(){
 ~CornerSquare(){
 glBindVertexArray(0);
 glDeleteVertexArrays(1,&vao);
-glDeleteBuffers(2,vbo);
+glDeleteBuffers(3,vbo);
 }
 
 
 GLuint vao;
-GLuint vbo[2];
+GLuint vbo[3];
 
 };
 
