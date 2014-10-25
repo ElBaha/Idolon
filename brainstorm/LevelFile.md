@@ -39,6 +39,10 @@ Commands
 
   `r <trigger id> <result> <arg ...>`
 
+- Specifies a initial position of the player.
+
+  `p <x> <y>`
+
 Trigger Conditions
 ------------------
 

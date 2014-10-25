@@ -106,6 +106,17 @@ void Level::load(const char * filename) {
 			id = std::string(idcs);
 			entities[id] = new Entity(string(buf), x, y, w, h);
 			break;
+		case 'S':
+			assert(6 == fscanf(f, " %512s %512s %g %g %g %g\n", idcs, buf, &x, &y, &w, &h));
+			id = std::string(idcs);
+			entities[id] = new Entity(string(buf), x, y, w, h);
+			entities[id]->collidable = false;
+			break;
+		case 'p':
+			assert(2 == fscanf(f, " %g %g\n", &x, &y));
+			player->pos.x = x;
+			player->pos.y = y;
+			break;
 		case 'c':
 			Condition cond;
 			assert(2 == fscanf(f, " %512s %s", idcs, buf));
