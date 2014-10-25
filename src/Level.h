@@ -18,6 +18,7 @@ public:
 	void load(const char *);
     void setup();
 	void use();
+	void renderStat();
 
     float camX,camY;
 	std::string bg_name;
