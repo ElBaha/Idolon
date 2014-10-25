@@ -1,8 +1,10 @@
 B L1 200 100
-p 40 20
-s 1 outline 10 0 80 9
-s 2 phone 100 0 10 10
-s 3 handycrate 110 10 10 10
+p 60 20
+s 1 crate 0 20 10 10
+s 2 crate 0 10 10 10
+s 3 crate 0 0 10 10
+S 4 phone 100 0 5 5
+s 5 handycrate 110 10 11 10
 
 c 0 x-after 110
-r 0 delta 3 .1 0
+r 0 delta 5 .1 0
