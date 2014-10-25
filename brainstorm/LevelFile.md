@@ -19,6 +19,10 @@ Commands
 
   `b <entity id> <x> <y> <width> <height>`
 
+- Specify the background image and size coordinates.
+
+  `B <background image> <width> <height>`
+
 - Specify a static sprite with collision:
 
   `s <entity id> <image> <x> <y> <width> <height>`

@@ -69,18 +69,15 @@ int main ( int argc, char** argv ) {
 
     Level l;
     theLevel = &l;
-	//l.player = new Entity("outline", 50, 90, 20, 40, 0);
+
+	// TODO don't hardcode the player
 	l.player = new Entity();
 	l.player->fixed = false;
-	l.entities.push_back(l.player);
-	l.entities.push_back(new Entity("outline", 10, 0, 80, 9));
-	l.entities.push_back(new Entity("crate", 100, 0, 10, 10));
-	l.entities.back()->use=ttess;
-	l.entities.push_back(new Entity("crate", 160, 10, 10, 10));
-	l.entities.push_back(new Entity("crate", 150, 0, 10, 10));
+
+	l.entities[0] = l.player;
+	l.load("Levels/1"); // TODO ideally don't use a relative path
+
     l.run(screen);
-
-
 
     //cleanup
     shutdownGL();
