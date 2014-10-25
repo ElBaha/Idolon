@@ -49,8 +49,35 @@ void Level::setup() {
     glUniform3f(tempLoc,0,0,0);
     tempLoc=glGetUniformLocation(getShader("sprite"), "fade");
     glUniform1f(tempLoc,0.5);
+}
 
+void Level::load(const char * filename) {
+	const int buf_size = 512;
+	char buf[buf_size];
 
+	FILE * f = fopen(filename, "rb");
+	if (f == NULL) {
+		fprintf(stderr, "Could not open level file '%s'.\n", filename);
+		exit(EXIT_FAILURE);
+	}
+
+	// TODO fix so entities don't overwrite each other (potential lost memory during lod)
+	while (!feof(f)) {
+		int c = fgetc(f);
+		switch (c) {
+		case '#':
+			while (fgetc(f) != '\n' && !feof(f));
+			break;
+		case 's':
+			int id;
+			float x, y, w, h;
+			assert(6 == fscanf(f, " %d %512s %g %g %g %g\n", &id, buf, &x, &y, &w, &h));
+			entities[id] = new Entity(string(buf), x, y, w, h);
+			break;
+		}
+	}
+
+	fclose(f);
 }
 
 void Level::run(SDL_Window* window) {
@@ -90,9 +117,9 @@ void Level::run(SDL_Window* window) {
         glBindVertexArray(0);
 
 
-        for (int i = 0; i < entities.size(); i++) {
-            entities[i]->update(this);
-            entities[i]->render(viewMatrix);
+        for (map<int, Entity *>::iterator it = entities.begin(); it != entities.end(); ++it) {
+            it->second->update(this);
+            it->second->render(viewMatrix);
         }
 
         SDL_GL_SwapWindow(window);

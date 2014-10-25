@@ -3,7 +3,7 @@
 
 class Level;
 
-#include <vector>
+#include <map>
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include "Entity.h"
@@ -14,6 +14,7 @@ public:
     Level();
     ~Level();
     void run(SDL_Window* window);
+	void load(const char *);
     void setup();
 
     float camX,camY;
@@ -21,7 +22,7 @@ public:
     vao::CenterSquare fg;
 
 	Entity * player;
-	std::vector<Entity *> entities;
+	std::map<int, Entity *> entities;
 
 };
 
