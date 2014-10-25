@@ -8,6 +8,9 @@
 #include "StatSprite.h"
 #include "TweakableMechanics.h"
 
+#include <iostream>
+using namespace std;
+
 Level* theLevel = NULL;
 
 Level::Level() {
@@ -29,16 +32,6 @@ void Level::setup() {
 
     glm::mat4 temp;
     temp=glm::ortho(0.0,100.0,0.0,100.0,-50.0,50.0);
-    /*int tempLoc=glGetUniformLocation(getShader("debris"), "projectionMatrix");
-    glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
-
-    glUseProgram(getShader("laser"));
-    tempLoc=glGetUniformLocation(getShader("laser"), "projectionMatrix");
-    glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
-
-    glUseProgram(getShader("mod"));
-    tempLoc=glGetUniformLocation(getShader("mod"), "projectionMatrix");
-    glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);*/
 
     glUseProgram(getShader("sprite"));
     GLuint tempLoc=glGetUniformLocation(getShader("sprite"), "projectionMatrix");
@@ -49,6 +42,31 @@ void Level::setup() {
     glUniform3f(tempLoc,0,0,0);
     tempLoc=glGetUniformLocation(getShader("sprite"), "fade");
     glUniform1f(tempLoc,0.5);
+
+    temp=glm::ortho(0.0,100.0,0.0,100.0,-50.0,50.0);
+    glUseProgram(getShader("ui"));
+    tempLoc=glGetUniformLocation(getShader("ui"), "projMatrix");
+    glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
+    tempLoc=glGetUniformLocation(getShader("ui"), "sampler");
+    glUniform1i(tempLoc,0);
+    tempLoc=glGetUniformLocation(getShader("ui"), "textColor");
+    glUniform3f(tempLoc,1,0,0);
+    tempLoc=glGetUniformLocation(getShader("ui"), "mode");
+    glUniform1i(tempLoc,2);
+}
+
+void Level::renderStat(){
+
+	glm::mat4 temp=glm::translate(glm::mat4(),glm::vec3(40,96,5));
+	glUseProgram(getShader("ui"));
+        GLuint tempLoc=glGetUniformLocation(getShader("ui"), "modelMatrix");
+        glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
+
+	TextRenderer rend("TextAB");
+	rend.setRenderSize(2,3);
+
+	rend.renderString("Hello");
+
 }
 
 void Level::load(const char * filename) {
@@ -197,6 +215,7 @@ void Level::run(SDL_Window* window) {
 		for (map<int, Trigger *>::iterator it = triggers.begin(); it != triggers.end(); ++it) {
             it->second->attempt(*this);
         }
+	renderStat();
 
         SDL_GL_SwapWindow(window);
 
@@ -205,5 +224,14 @@ void Level::run(SDL_Window* window) {
             SDL_Delay(ticks_per_frame - (ticks - pticks));
         pticks = ticks;
     }
+
+}
+
+void Level::use(){
+
+	for (int i = 0; i < entities.size(); i++) {
+		if(entities[i]->canUse(player))
+            		entities[i]->use(NULL);
+        }
 
 }

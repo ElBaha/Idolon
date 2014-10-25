@@ -61,6 +61,9 @@ int gameInput(bool &quit){
 						theLevel->player->accel.x = 0.;
 						theLevel->player->setAnim(ANIM_IDLE);
                         }
+		    if (event.key.keysym.sym == SDLK_SPACE){
+						theLevel->use();
+                        }
 
 
                     break;

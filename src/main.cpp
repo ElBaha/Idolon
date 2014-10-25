@@ -13,6 +13,10 @@
 
 #define VERSION "Idolon v0.0"
 
+void ttess(void* u){
+cout<<"Hello"<<endl;
+}
+
 int main ( int argc, char** argv ) {
     // initialize SDL video
     if ( SDL_Init( SDL_INIT_VIDEO /*| SDL_INIT_JOYSTICK*/ ) < 0 ) {
@@ -69,8 +73,10 @@ int main ( int argc, char** argv ) {
 	// TODO don't hardcode the player
 	l.player = new Entity();
 	l.player->fixed = false;
+
 	l.entities[0] = l.player;
 	l.load("Levels/1"); // TODO ideally don't use a relative path
+
     l.run(screen);
 
     //cleanup

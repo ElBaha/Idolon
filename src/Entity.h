@@ -11,7 +11,7 @@ class Entity;
 
 class Entity
 {
-    public:
+public:
 	Sprite * sprite;
 	float angle;
 	glm::vec2 pos, delta, box;
@@ -27,8 +27,12 @@ public:
 	void update(const Level *);
 	void render(glm::mat4 view);
 	void setAnim(int s);
+	bool canUse(Entity*);
 
+
+	void (*use)(void* u);
 	bool fixed;
+	bool collidable;
 	glm::vec2 accel;
 };
 
