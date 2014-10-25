@@ -12,7 +12,7 @@ Entity::Entity() {
 	pos.x = 40.;
 	pos.y = 120.;
 	box.x = 10.;
-	box.y = 100.;
+	box.y = 20.;
 	fixed = false;
 }
 
@@ -21,7 +21,7 @@ Entity::Entity(string t, float x, float y, float w, float h) {
 	delta.x = delta.y = 0.;
 	accel.x = accel.y = 0.;
 	pos.x = x;
-	pos.x = y;
+	pos.y = y;
 	box.x = w;
 	box.y = h;
 	fixed = true;
@@ -38,14 +38,14 @@ void Entity::collides(const Entity * e) {
 
 	// have a collision, adjust for it
 	float dx1 = -(e->pos.x + e->box.x) + pos.x;
-	float dx2 = -e->pos.x + (e->pos.x + e->box.x);
+	float dx2 = -e->pos.x + (pos.x + box.x);
 	float dy1 = -(e->pos.y + e->box.y) + pos.y;
-	float dy2 = -e->pos.y + (e->pos.y + e->box.y);
+	float dy2 = -e->pos.y + (pos.y + box.y);
 
 	float dx = abs(dx1) < abs(dx2) ? dx1 : dx2;
 	float dy = abs(dy1) < abs(dy2) ? dy1 : dy2;
 
-	if (abs(dx) < abs(dy)-10) {
+	if (abs(dx) < abs(dy)-10 || dy>0) {
 		pos.x -= dx;
 		if (dx < 0 && delta.x < 0) delta.x = 0.;
 		if (dx > 0 && delta.x > 0) delta.x = 0.;
@@ -74,10 +74,14 @@ void Entity::update(const Level * l) {
 	if ( delta.y >  max_delta_y) delta.y =  max_delta_y;
 	if (-delta.y < -max_delta_y) delta.y = -max_delta_y;
 
-	if(delta.y+pos.y<0) delta.y=0;
-
 	pos.x += delta.x;
 	pos.y += delta.y;
+
+	if(pos.y<0){
+	    pos.y=0;
+	    delta.y=0;
+	    delta.x *= friction_x;
+	}
 
 	// don't bother to check collision if we don't move
 	if (delta.x || delta.y) {
