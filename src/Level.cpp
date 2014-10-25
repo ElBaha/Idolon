@@ -17,7 +17,7 @@ Level* theLevel = NULL;
 Level::Level() {
     camX=camY=0;
     player = NULL;
-
+	memo="coce!?";
 }
 
 Level::~Level() {
@@ -80,7 +80,7 @@ void Level::renderStat(){
 
 
 
-	temp=glm::translate(glm::mat4(),glm::vec3(40,96,5));
+	temp=glm::translate(glm::mat4(),glm::vec3(50-memo.length(),96,5));
 	
         tempLoc=glGetUniformLocation(getShader("ui"), "modelMatrix");
         glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
@@ -93,7 +93,7 @@ void Level::renderStat(){
 	TextRenderer rend("TextAB");
 	rend.setRenderSize(2,3);
 
-	rend.renderString("Hello");
+	rend.renderString(memo);
 
 }
 
