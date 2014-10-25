@@ -8,6 +8,7 @@ class Level;
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include "Entity.h"
+#include "Trigger.h"
 #include "stdvao.h"
 
 class Level {
@@ -26,7 +27,7 @@ public:
 
 	Entity * player;
 	std::map<int, Entity *> entities;
-
+	std::map<int, Trigger *> triggers;
 };
 
 extern Level* theLevel;

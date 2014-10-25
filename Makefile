@@ -12,7 +12,7 @@ CCFL := -c -g -Wall -Wno-sign-compare
 LDFL := -Wall -lGL -lGLU -lGLEW -lSDL2 -lpng
 
 # List of source files
-SRCS := BoneSprite.cpp Input.cpp main.cpp StatSprite.cpp Sprite.cpp GameOptions.cpp Level.cpp ShaderHelp.cpp Textures.cpp Entity.cpp
+SRCS := BoneSprite.cpp Input.cpp main.cpp StatSprite.cpp Sprite.cpp GameOptions.cpp Level.cpp ShaderHelp.cpp Textures.cpp Entity.cpp Trigger.cpp
 
 # Construct file lists
 OBJS := $(addprefix build/obj/,$(patsubst %.cpp,%.o,$(SRCS)))

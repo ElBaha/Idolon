@@ -63,7 +63,11 @@ void Level::load(const char * filename) {
 
 	// TODO fix so entities don't overwrite each other (potential lost memory during lod)
 	while (!feof(f)) {
+		int id;
+		float x, y, w, h;
+		Result res;
 		int c = fgetc(f);
+
 		switch (c) {
 		case '#':
 			while (fgetc(f) != '\n' && !feof(f));
@@ -73,11 +77,75 @@ void Level::load(const char * filename) {
 			bg_name = string(buf);
 			break;
 		case 's':
-			int id;
-			float x, y, w, h;
 			assert(6 == fscanf(f, " %d %512s %g %g %g %g\n", &id, buf, &x, &y, &w, &h));
 			entities[id] = new Entity(string(buf), x, y, w, h);
 			break;
+		case 'c':
+			Condition cond;
+			assert(2 == fscanf(f, " %d %s", &id, buf));
+
+			if (triggers[id] == NULL) {
+				triggers[id] = new Trigger;
+			}
+
+			if (!strcmp(buf, "x-before")) {
+				assert(1 == fscanf(f, " %g\n", &x));
+				cond.type = Condition::X_BEFORE;
+				cond.value = x;
+			} else
+			if (!strcmp(buf, "x-after")) {
+				assert(1 == fscanf(f, " %g\n", &x));
+				cond.type = Condition::X_AFTER;
+				cond.value = x;
+			} else
+			if (!strcmp(buf, "y-before")) {
+				assert(1 == fscanf(f, " %g\n", &x));
+				cond.type = Condition::Y_BEFORE;
+				cond.value = x;
+			} else
+			if (!strcmp(buf, "y-after")) {
+				assert(1 == fscanf(f, " %g\n", &x));
+				cond.type = Condition::Y_AFTER;
+				cond.value = x;
+			} else {
+				assert(0); // TODO don't be lazy
+			}
+
+			triggers[id]->conditions.push_back(cond);
+			break;
+		case 'r':
+			int id2;
+			assert(2 == fscanf(f, " %d %s", &id, buf));
+
+			if (triggers[id] == NULL) {
+				triggers[id] = new Trigger;
+			}
+
+			if (!strcmp(buf, "dialogue")) {
+				assert(1 == fscanf(f, " %s\n", buf));
+				res.type = Result::DIALOGUE;
+				res.arg_str = string(buf);
+			} else
+			if (!strcmp(buf, "enable")) {
+				assert(1 == fscanf(f, " %d\n", &id2));
+				res.type = Result::ENABLE;
+				res.arg_in = id2;
+			} else
+			if (!strcmp(buf, "disable")) {
+				assert(1 == fscanf(f, " %d\n", &id2));
+				res.type = Result::DISABLE;
+				res.arg_in = id2;
+			} else {
+				assert(0);
+			}
+
+			triggers[id]->results.push_back(res);
+			break;
+		case '\n':
+			break;
+		default:
+			fprintf(stderr, "Don't know the level file command '%c'.\n", c);
+			exit(EXIT_FAILURE);
 		}
 	}
 
@@ -93,7 +161,7 @@ void Level::run(SDL_Window* window) {
     int ticks, pticks = SDL_GetTicks();
 
     while(!quit) {
-        SDL_Delay(20);
+		SDL_Delay(20);
         gameInput(quit);
 
         camX=-player->pos.x+50;
@@ -124,6 +192,10 @@ void Level::run(SDL_Window* window) {
         for (map<int, Entity *>::iterator it = entities.begin(); it != entities.end(); ++it) {
             it->second->update(this);
             it->second->render(viewMatrix);
+        }
+
+		for (map<int, Trigger *>::iterator it = triggers.begin(); it != triggers.end(); ++it) {
+            it->second->attempt(*this);
         }
 
         SDL_GL_SwapWindow(window);

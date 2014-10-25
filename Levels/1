@@ -2,3 +2,24 @@ B L1 200 100
 s 1 outline 10 0 80 9
 s 2 crate 100 0 10 10
 s 3 crate 110 10 10 10
+
+# Trigger definitions
+c 0 x-after 70
+r 0 disable 0
+r 0 dialogue Mellow
+
+c 1 x-after 80
+r 1 disable 1
+r 1 dialogue greetings
+
+c 2 x-after 90
+r 2 disable 2
+r 2 dialogue my
+
+c 3 x-after 100
+r 3 disable 3
+r 3 dialogue dear
+
+c 4 x-after 110
+r 4 disable 4
+r 4 dialogue friend
