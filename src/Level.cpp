@@ -12,10 +12,30 @@
 #include <iostream>
 using namespace std;
 
-void dummy_use_func(void *) {}
+void dummy_use_func(Entity* e,void *) {}
 
-void (* use_functions[])(void *) = {
-	dummy_use_func
+void pickup(Entity* e,void* u){
+	theLevel->player->heldObject=e;
+}
+
+void lever(Entity* e,void* u){
+	((StatSprite*)e->sprite)->tex="Lever2";
+}
+
+void remove(Entity* e,void* u){
+	for(map<std::string, Entity *>::iterator it=theLevel->entities.begin(); it!=theLevel->entities.end(); it++)
+        if(e==it->second){
+		delete it->second;
+		theLevel->entities.erase(it);
+		return;	
+	}
+}
+
+void (* use_functions[])(Entity* e,void *) = {
+	dummy_use_func,
+	pickup,
+	remove,
+	lever
 };
 
 Level* theLevel = NULL;
@@ -23,7 +43,7 @@ Level* theLevel = NULL;
 Level::Level() {
     camX=camY=0;
     player = NULL;
-	memo="coce!?";
+	memo="";
 }
 
 Level::~Level() {
@@ -239,7 +259,7 @@ void Level::run(SDL_Window* window) {
 
     setup();
     bool quit=false;
-    float fade=0;
+    float fade=1;
 
     int ticks, pticks = SDL_GetTicks();
 
@@ -294,9 +314,14 @@ void Level::run(SDL_Window* window) {
 
 void Level::use(){
 
+	if(player->heldObject){
+		player->heldObject=NULL;
+		return;
+	}
+
 	for (map<std::string, Entity *>::iterator it = entities.begin(); it != entities.end(); ++it) {
 		if(it->second->canUse(player))
-            		it->second->use(NULL);
+            		it->second->use(it->second,NULL);
         }
 
 }

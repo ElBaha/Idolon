@@ -27,7 +27,7 @@ Entity::Entity(string t, float x, float y, float w, float h) {
 	pos.y = y;
 	box.x = w;
 	box.y = h;
-	fixed = true;
+	fixed = false;//true;
 	collidable=true;
 	use=NULL;
 	heldObject=NULL;
@@ -75,10 +75,6 @@ bool Entity::canUse(Entity* e){
 	return true;
 }
 
-void pickup(Entity* e,void* u){
-	theLevel->player->heldObject=e;
-}
-
 void Entity::update(const Level * l) {
 	// adjust for gravity
 	if (!fixed) {
@@ -87,8 +83,12 @@ void Entity::update(const Level * l) {
 	
 	//adjust held object
 	if(heldObject!=NULL){
-		heldObject->pos.x=(box.x+pos.x)/2;
-		heldObject->pos.y=(box.y+pos.y)/2;
+		heldObject->pos.x=(box.x+pos.x)+1;
+		for (map<std::string, Entity *>::const_iterator it = l->entities.begin(); it != l->entities.end(); ++it)
+			heldObject->collides(it->second);
+		
+		if(abs(heldObject->pos.x-pos.x)<box.x)
+			heldObject=NULL;
 	}
 	// update position
 	delta.x += accel.x;

@@ -31,7 +31,7 @@ public:
 	bool canUse(Entity*);
 
 
-	void (*use)(void* u);
+	void (*use)(Entity* e,void* u);
 	bool fixed;
 	bool collidable;
 	glm::vec2 accel;

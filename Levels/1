@@ -5,6 +5,29 @@ s 2 crate 0 10 10 10
 s 3 crate 0 0 10 10
 S 4 phone 100 0 5 5
 s 5 handycrate 110 10 11 10
+s 6 handycrate 150 0 11 10
+s 7 crate 390 20 10 10
+s 8 crate 390 10 10 10
+s 9 crate 390 0 10 10
 
-c 0 x-after 110
-r 0 delta 5 .1 0
+s 10 crate 200 0 20 20
+s 11 crate 220 20 10 10
+s 12 crate 220 10 10 10
+s 13 crate 220 0 10 10
+s 14 crate 230 0 20 20
+s 15 crate 230 20 20 20
+s 16 crate 250 20 20 20
+s 17 crate 250 40 20 20
+s 18 crate 270 40 20 20
+s 19 crate 270 20 20 20
+s 20 crate 270 0 20 20
+s 21 handycrate 230 200 11 10
+
+S 22 Lever1 280 60 10 10
+
+
+u 5 1
+u 6 1
+u 21 1
+u 4 2
+u 22 3
