@@ -12,12 +12,18 @@
 #include <iostream>
 using namespace std;
 
+void dummy_use_func(void *) {}
+
+void (* use_functions[])(void *) = {
+	dummy_use_func
+};
+
 Level* theLevel = NULL;
 
 Level::Level() {
     camX=camY=0;
     player = NULL;
-
+	memo="coce!?";
 }
 
 Level::~Level() {
@@ -80,7 +86,7 @@ void Level::renderStat(){
 
 
 
-	temp=glm::translate(glm::mat4(),glm::vec3(40,96,5));
+	temp=glm::translate(glm::mat4(),glm::vec3(50-memo.length(),96,5));
 	
         tempLoc=glGetUniformLocation(getShader("ui"), "modelMatrix");
         glUniformMatrix4fv(tempLoc,1, GL_FALSE,&temp[0][0]);
@@ -93,7 +99,7 @@ void Level::renderStat(){
 	TextRenderer rend("TextAB");
 	rend.setRenderSize(2,3);
 
-	rend.renderString("Hello");
+	rend.renderString(memo);
 
 }
 
@@ -115,7 +121,7 @@ void Level::load(const char * filename) {
 		std::string id2;
 		float x, y, w, h;
 		Result res;
-		int c = fgetc(f);
+		int n, c = fgetc(f);
 
 		switch (c) {
 		case '#':
@@ -135,6 +141,12 @@ void Level::load(const char * filename) {
 			id = std::string(idcs);
 			entities[id] = new Entity(string(buf), x, y, w, h);
 			entities[id]->collidable = false;
+			break;
+		case 'u':
+			assert(2 == fscanf(f, " %512s %d", idcs, &n));
+			id = std::string(idcs);
+			assert(entities[id] != NULL);
+			entities[id]->use = use_functions[n];
 			break;
 		case 'p':
 			assert(2 == fscanf(f, " %g %g\n", &x, &y));

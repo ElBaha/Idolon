@@ -11,6 +11,8 @@ class Level;
 #include "Trigger.h"
 #include "stdvao.h"
 
+using namespace std;
+
 class Level {
 public:
     Level();
@@ -30,6 +32,7 @@ public:
 	Entity * player;
 	std::map<std::string, Entity *> entities;
 	std::map<std::string, Trigger *> triggers;
+	string memo;
 };
 
 extern Level* theLevel;
