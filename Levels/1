@@ -65,4 +65,4 @@ r 5 enable 6
 
 c 6 delay 2000
 r 6 dialogue The picture is a bit grainy, I'll adjust it as we go.
-r 6 enable 7
+#r 6 enable 7
