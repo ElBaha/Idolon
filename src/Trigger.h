@@ -13,12 +13,17 @@ struct Condition {
 		X_AFTER,
 		Y_BEFORE,
 		Y_AFTER,
+		EXISTS,
+		NOT_EXISTS,
+		DELAY,
 	};
 
 	Type type;
 	float value;
+	unsigned time_delay;
+	std::string str;
 
-	bool check(Level &);
+	bool check(Level &, const Trigger *);
 };
 
 struct Result {
@@ -39,14 +44,17 @@ struct Result {
 };
 
 class Trigger {
-public:
+	unsigned start_time;
 	bool enabled;
-
+public:
 	Trigger();
+	void enable(bool);
 	void attempt(Level &);
 
 	std::vector<Condition> conditions;
 	std::vector<Result> results;
+
+	friend class Condition;
 };
 
 #endif

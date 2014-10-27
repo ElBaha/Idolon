@@ -25,9 +25,44 @@ s 21 handycrate 230 200 11 10
 
 S 22 Lever1 280 60 10 10
 
-
 u 5 1
 u 6 1
 u 21 1
 u 4 2
 u 22 3
+
+# Initial disables of triggers, should probably work
+r init disable 1
+r init disable 2
+r init disable 3
+r init disable 4
+r init disable init
+
+# This triggers when the phone is picked up
+c 0 not-exists 4
+r 0 dialogue Hello
+r 0 enable 1
+
+c 1 delay 2000
+r 1 dialogue I see you've awoken. How fortunate.
+r 1 enable 2
+
+c 2 delay 2000
+r 2 dialogue I know you're a bit disgruntled
+r 2 enable 3
+
+c 3 delay 2000
+r 3 dialogue by your current predicament,
+r 3 enable 4
+
+c 4 delay 2000
+r 4 dialogue but we'll have to look past that for the moment.
+r 4 enable 5
+
+c 5 delay 2000
+r 5 dialogue you should start making your way forward
+r 5 enable 6
+
+c 6 delay 2000
+r 6 dialogue The picture is a bit grainy, I'll adjust it as we go.
+r 6 enable 7

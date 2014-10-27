@@ -27,7 +27,6 @@ void remove(Entity* e,void* u){
         if(e==it->second){
 		delete it->second;
 		theLevel->entities.erase(it);
-		return;	
 	}
 }
 
@@ -141,7 +140,10 @@ void Level::load(const char * filename) {
 		std::string id2;
 		float x, y, w, h;
 		Result res;
+		Condition cond;
 		int n, c = fgetc(f);
+
+		if (c == EOF) break;
 
 		switch (c) {
 		case '#':
@@ -174,8 +176,7 @@ void Level::load(const char * filename) {
 			player->pos.y = y;
 			break;
 		case 'c':
-			Condition cond;
-			assert(2 == fscanf(f, " %512s %s", idcs, buf));
+			assert(2 == fscanf(f, " %512s %512s", idcs, buf));
 			id = std::string(idcs);
 
 			if (triggers[id] == NULL) {
@@ -201,6 +202,20 @@ void Level::load(const char * filename) {
 				assert(1 == fscanf(f, " %g\n", &x));
 				cond.type = Condition::Y_AFTER;
 				cond.value = x;
+			} else
+			if (!strcmp(buf, "exists")) {
+				assert(1 == fscanf(f, " %512s\n", buf));
+				cond.type = Condition::EXISTS;
+				cond.str = string(buf);
+			} else
+			if (!strcmp(buf, "not-exists")) {
+				assert(1 == fscanf(f, " %512s\n", buf));
+				cond.type = Condition::NOT_EXISTS;
+				cond.str = string(buf);
+			} else
+			if (!strcmp(buf, "delay")) {
+				assert(1 == fscanf(f, "%d", &cond.time_delay));
+				cond.type = Condition::DELAY;
 			} else {
 				assert(0); // TODO don't be lazy
 			}
@@ -216,7 +231,8 @@ void Level::load(const char * filename) {
 			}
 
 			if (!strcmp(buf, "dialogue")) {
-				assert(1 == fscanf(f, " %s\n", buf));
+				fgets(buf, 512, f);
+				if (buf[strlen(buf)-1] == '\n') buf[strlen(buf)-1] = 0;
 				res.type = Result::DIALOGUE;
 				res.arg_str = string(buf);
 			} else
